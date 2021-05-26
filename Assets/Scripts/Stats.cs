@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-    [Serializable]
-    public struct Stats
-    {
-        int HP;
-        int Stregth;
-        int Defense;
-        int Speed;
-    }
+[Serializable]
+public struct Stats
+{
+    public int HP;
+    public int Stregth;
+    public int Defense;
+    public int Speed;
+}

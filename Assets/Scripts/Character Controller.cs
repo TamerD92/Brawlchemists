@@ -99,6 +99,11 @@ public class CharacterController : MonoBehaviour
     public virtual void SetWallDir(float dir)
     { }
 
+    public void takeDamage(int damage)
+    {
+        currStats.HP -= damage;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.tag == "Floor" && CheckDownCollision())

@@ -15,6 +15,9 @@ public class PlayerController : CharacterController
 
     public SpriteRenderer PlayerGFX;
 
+    public bool IsFrozen, IsPoisoned;
+    public float PoisonTime, FreezeTime;
+
     public override void Init()
     {
         base.Init();
@@ -153,7 +156,46 @@ public class PlayerController : CharacterController
     {
         controller.enabled = true;
     }
+
+    public IEnumerator TemporaryStun(float time)
+    {
+        FreezeTime = time;
+        DisableAllControllers();
+        if (!IsFrozen)
+        {
+            IsFrozen = true;
+            while (FreezeTime > 0)
+            {
+                FreezeTime -= Time.deltaTime;
+                yield return null;
+            }
+            EnableAllControllers();
+            IsFrozen = false;
+        }
+
+        
+    }
     #endregion
+
+    public IEnumerator damageOverTime(float time, int damage)
+    {
+        PoisonTime = time;
+        if (!IsPoisoned)
+        {
+            IsPoisoned = true;
+            while (PoisonTime > 0)
+            {
+                PoisonTime -= Time.deltaTime;
+                yield return null;
+                if (PoisonTime % 1 == 0)
+                {
+                    currStats.HP -= damage;
+                }
+            }
+            IsPoisoned = false;
+        }
+        
+    }
 
     public Vector2 returnForward()
     {
