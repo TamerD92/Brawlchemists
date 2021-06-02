@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class EffectBaseClass : MonoBehaviour, EffectInterface
 {
+    public int ID;
+
+    public Collider2D[] baseCollider;
+
+    public float Duration;
+
     public virtual void doEffect(PlayerController player)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Duration -= Time.deltaTime;
+        if (Duration <= 0)
+        {
+            GameController.instance.ReturnToPool(this);
+        }
     }
 }

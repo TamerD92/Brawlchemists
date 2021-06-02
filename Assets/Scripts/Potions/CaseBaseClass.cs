@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class CaseBaseClass : ScriptableObject, CaseInterface
 {
-    public float MaxStrength { get ; set; }
+    public float maxStrength;
+
+    public float MaxStrength { get => maxStrength; set => maxStrength = value; }
 }

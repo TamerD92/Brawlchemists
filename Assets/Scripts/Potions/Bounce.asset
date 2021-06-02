@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afddaeb678bb5b46910f9eb134b6830, type: 3}
   m_Name: Bounce
   m_EditorClassIdentifier: 
-  maxStrength: 0
-  bounceMat: {fileID: 0}
-  BounceAmount: 0
+  maxStrength: 3
+  bounceMat: {fileID: 6200000, guid: 93f39192312fec745bb8b2fa9bbb48b8, type: 2}
+  BounceAmount: 3

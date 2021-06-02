@@ -51,5 +51,9 @@ public class JumpingController : BaseController
         currJumpAmount = jumpAmount;
     }
 
-    
+    public override void reset()
+    {
+        resetJumps();
+    }
+
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -10,28 +11,52 @@ public class GameController : MonoBehaviour
 
     public Potion potionPrefab;
 
-    public List<Potion> potionList;
+    public EffectBaseClass[] EffectsTypes;
 
-    public EffectBaseClass[] PotionEffects;
+    public CaseBaseClass[] CaseTypes;
+
+    public PickupBase[] PickupTypes;
+
+    public List<Potion> potionList;
 
     List<EffectBaseClass> EffectsPool;
 
-    public CaseBaseClass[] CaseTypes;
+    public List<PickupBase> PickupPool;
+
+    public Transform PotionPoolTransform, EffectPoolTransform, PickupPoolTransform;
+
+    public GroundLinesStruct[] GroundLines;
 
     public static GameController instance;
 
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+
         potionList = new List<Potion>();
         EffectsPool = new List<EffectBaseClass>();
-        for (int i = 0; i < 20; i++)
+        PickupPool = new List<PickupBase>();
+        for (int i = 0; i < 40; i++)
         {
             Potion newPot = Instantiate(potionPrefab);
             potionList.Add(newPot);
 
-            EffectBaseClass eff = Instantiate(PotionEffects[0]);
+            newPot.transform.SetParent(PotionPoolTransform);
+            newPot.transform.localPosition = Vector3.zero;
+            newPot.preInit();
+
+            EffectBaseClass eff = Instantiate(EffectsTypes[i%5]);
             EffectsPool.Add(eff);
+
+            eff.transform.SetParent(EffectPoolTransform);
+            eff.transform.localPosition = Vector3.zero;
+
+            PickupBase pickup = Instantiate(PickupTypes[i % 2]);
+            PickupPool.Add(pickup);
+
+            pickup.transform.SetParent(PickupPoolTransform);
+            pickup.transform.localPosition = Vector3.zero;
         }
 
         
@@ -40,7 +65,39 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GeneratePickup();
+        }
+    }
+
+    public void GeneratePickup()
+    {
+
+        PickupBase pickup;
+        Vector3 finalWorldPos = new Vector3();
+
+        int type = Random.Range(0, 100);
+        if (type < 60)
+        {
+            pickup = PickupPool.First(o => o is EffectPickup);
+        }
+        else
+        {
+            pickup = PickupPool.First(o => o is CasePickup);
+        }
+
+        PickupPool.Remove(pickup);
+
+        pickup.transform.SetParent(null);
+        pickup.Generate();
+
+        GroundLinesStruct baseLocation = GroundLines[Random.Range(0, GroundLines.Length - 1)];
+
+        finalWorldPos.y = baseLocation.Base.position.y;
+        finalWorldPos.x = Random.Range(baseLocation.Start.position.x, baseLocation.End.position.x);
+
+        pickup.transform.position = finalWorldPos;
     }
 
     public static Potion CreatePotion(CaseBaseClass Case, EffectBaseClass Effect)
@@ -66,6 +123,7 @@ public class GameController : MonoBehaviour
             newPot.Case = Case;
 
             newPot.init();
+            newPot.gameObject.SetActive(false);
 
             return newPot;
         }
@@ -73,5 +131,25 @@ public class GameController : MonoBehaviour
         {
             return null;
         }
+    }
+
+    public void ReturnToPool(Potion potion)
+    {
+        potion.transform.SetParent(PotionPoolTransform);
+        potion.transform.localPosition = Vector3.zero;
+        //potion.gameObject.SetActive(false);
+    }
+
+    public void ReturnToPool(EffectBaseClass effect)
+    {
+        effect.transform.SetParent(EffectPoolTransform);
+        effect.transform.localPosition = Vector3.zero;
+        effect.gameObject.SetActive(false);
+    }
+
+    public void ReturnToPool(PickupBase pickup)
+    {
+        pickup.transform.SetParent(PickupPoolTransform);
+        pickup.transform.localPosition = Vector3.zero;
     }
 }

@@ -1,27 +1,42 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : CharacterController
 {
-    public WalkerController playerWalk;
-    public JumpingController playerJump;
-    public DashController playerDash;
-    public AttackController playerAttack;
-    public WalljumpController playerWallJump;
+    #region controllers
+    public BaseController[] PlayerControllers;
 
+    public bool isJumpingAxisUsed, isPreparing, isThrowing, isPickingUp;
+    #endregion
 
-    public bool isJumpingAxisUsed, isAttackAxisUsed, isDashAxisUsed;
 
     public SpriteRenderer PlayerGFX;
 
     public bool IsFrozen, IsPoisoned;
     public float PoisonTime, FreezeTime;
 
+    public List<CaseBaseClass> CaseIngridients;
+    public List<EffectBaseClass> EffectIngridients;
+    public List<Potion> CurrentPotions;
+
+    public Potion selectedPotion;
+
+    public List<PickupBase> OverlappingPickups;
+
     public override void Init()
     {
         base.Init();
-        playerJump.resetJumps();
+        OverlappingPickups = new List<PickupBase>();
+        
+        EffectIngridients = new List<EffectBaseClass>();
+        CaseIngridients = new List<CaseBaseClass>();
+        CurrentPotions = new List<Potion>();
+        for (int i = 0; i < PlayerControllers.Length; i++)
+        {
+            PlayerControllers[i].reset();
+        }
     }
 
     // Start is called before the first frame update
@@ -33,25 +48,28 @@ public class PlayerController : CharacterController
     // Update is called once per frame
     void Update()
     {
-        playerWalk.currVelocity = Input.GetAxisRaw("Horizontal");
+        foreach (var item in PlayerControllers)
+        {
+            if (item is WalkerController)
+            {
+                (item as WalkerController).currVelocity = Input.GetAxis("Horizontal");    
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             Debug.DrawLine(transform.position, transform.position + Vector3.down * 2, Color.black, 100);
-
         }
 
         if (Input.GetAxisRaw("Jump") != 0 && !isJumpingAxisUsed)
         {
-            if (isTouchingWall && !isTouchingFloor)
+
+            foreach (var item in PlayerControllers)
             {
-                playerWallJump.Jump();
-                //DisableController(playerWalk);
-                //Invoke("EnableAllControllers", 0.3f);
-            }
-            else
-            {
-                playerJump.Jump();
+                if (item is JumpingController)
+                {
+                    (item as JumpingController).Jump();
+                }
             }
             isJumpingAxisUsed = true;
         }
@@ -60,24 +78,58 @@ public class PlayerController : CharacterController
             isJumpingAxisUsed = false;
         }
 
-        if (Input.GetAxis("Fire1") != 0 && !isAttackAxisUsed)
+        if (Input.GetAxis("Fire1") != 0 && !isThrowing && isTouchingFloor)
         {
-            playerAttack.Attack();
-            isAttackAxisUsed = true;
+            isPreparing = true;
+            foreach (var item in PlayerControllers)
+            {
+                if (item is ThrowingController)
+                {
+                    (item as ThrowingController).PrepareThrow();
+                }
+            }
+            isThrowing = true;
         }
-        else if (Input.GetAxis("Fire1") == 0)
+        else if (Input.GetAxis("Fire1") == 0 && isPreparing && CurrentPotions.Count > 0)
         {
-            isAttackAxisUsed = false;
+            foreach (var item in PlayerControllers)
+            {
+                if (item is ThrowingController)
+                {
+                    (item as ThrowingController).Throw();
+                }
+            }
+            isThrowing = false;
+            isPreparing = false;
         }
 
-        if (Input.GetAxis("Dash") != 0 && !isDashAxisUsed)
+        if (Input.GetAxis("Pickup") != 0 && OverlappingPickups.Count > 0 && !isPickingUp)
         {
-            playerDash.startDash();
-            isDashAxisUsed = true;
+            OverlappingPickups[0].Collect(this);
+            isPickingUp = true;
         }
-        else if (Input.GetAxis("Dash") == 0)
+        else if (Input.GetAxis("Pickup") == 0)
         {
-            isDashAxisUsed = false;
+            isPickingUp = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            CreatePotion(0 , 0);
+        }
+
+    }
+
+    private void CreatePotion(int Case, int Effect)
+    {
+        if (CaseIngridients.Count > 0 && EffectIngridients.Count > 0)
+        {
+            Potion pot = GameController.CreatePotion(CaseIngridients[Case], EffectIngridients[Effect]);
+            pot.transform.SetParent(transform);
+            pot.transform.localPosition = Vector3.zero;
+            CaseIngridients.RemoveAt(0);
+            EffectIngridients.RemoveAt(0);
+            CurrentPotions.Add(pot);
         }
     }
 
@@ -91,20 +143,13 @@ public class PlayerController : CharacterController
     public override void FloorTouched()
     {
         base.FloorTouched();
-        playerJump.resetJumps();
-        playerDash.resetDashes();
-    }
-
-    public override void WallTouched()
-    {
-        base.WallTouched();
-        playerWallJump.resetJumps();
-        
-    }
-
-    public override void SetWallDir(float dir)
-    {
-        playerWallJump.WallDir = dir;
+        foreach (var item in PlayerControllers)
+        {
+            if (item is JumpingController)
+            {
+                (item as JumpingController).resetJumps();
+            }
+        }
     }
 
     public void turnGFX()
@@ -133,7 +178,7 @@ public class PlayerController : CharacterController
     #region controller management
     public void DisableAllControllers()
     {
-        foreach (var item in GetComponents<BaseController>())
+        foreach (var item in PlayerControllers)
         {
             item.enabled = false;
         }
@@ -141,9 +186,20 @@ public class PlayerController : CharacterController
 
     public void EnableAllControllers()
     {
-        foreach (var item in GetComponents<BaseController>())
+        foreach (var item in PlayerControllers)
         {
             item.enabled = true;
+        }
+    }
+
+    public void DisableAllOtherControllers(BaseController controller)
+    {
+        foreach (var item in PlayerControllers)
+        {
+            if (item != controller)
+            {
+                item.enabled = false;
+            }
         }
     }
 
@@ -174,6 +230,18 @@ public class PlayerController : CharacterController
         }
 
         
+    }
+
+    public BaseController GetController(Type controllerType)
+    {
+        for (int i = 0; i < PlayerControllers.Length; i++)
+        {
+            if (PlayerControllers[i].GetType() == controllerType)
+            {
+                return PlayerControllers[i];
+            }
+        }
+        return null;
     }
     #endregion
 
@@ -208,12 +276,26 @@ public class PlayerController : CharacterController
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Attack")
+        if (collision.tag == "Pickup")
         {
-            if (collision.GetComponent<AttackController>().getParentTag() == "Enemy")
-            {
-                GotHitEvent.Invoke();
-            }
+            OverlappingPickups.Add(collision.GetComponent<PickupBase>());
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Pickup")
+        {
+            OverlappingPickups.Remove(collision.GetComponent<PickupBase>());
+        }
+    }
+
+    public void CreatePotion(CaseBaseClass Case, EffectBaseClass Effect)
+    {
+        CurrentPotions.Add(GameController.CreatePotion(Case, Effect));
+
+        CaseIngridients.Remove(Case);
+        EffectIngridients.Remove(Effect);
+
     }
 }

@@ -77,4 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7a0ae45af0e9e49b8ea5e71a5c8e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 1
+  baseCollider:
+  - {fileID: 6609251211841093034}
+  - {fileID: 1155838532284053197}
+  Duration: 1.5
   damage: 0

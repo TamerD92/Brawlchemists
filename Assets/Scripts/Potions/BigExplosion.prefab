@@ -60,3 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7a0ae45af0e9e49b8ea5e71a5c8e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 2
+  baseCollider:
+  - {fileID: 539055189330301704}
+  Duration: 1
+  damage: 0
