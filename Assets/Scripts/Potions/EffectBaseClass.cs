@@ -10,6 +10,9 @@ public class EffectBaseClass : MonoBehaviour, EffectInterface
 
     public float Duration;
 
+    public int damage;
+
+
     public virtual void doEffect(PlayerController player)
     {
         //throw new System.NotImplementedException();

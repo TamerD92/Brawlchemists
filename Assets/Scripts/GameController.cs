@@ -109,14 +109,14 @@ public class GameController : MonoBehaviour
             newPot = instance.potionList[0];
             instance.potionList.RemoveAt(0);
 
-            EffectBaseClass effect = instance.EffectsPool[0];
-            instance.EffectsPool.RemoveAt(0);
+            EffectBaseClass effect = instance.EffectsPool.Where(o => o.ID == Effect.ID).ToList()[0];
+            instance.EffectsPool.Remove(effect);
 
             effect.transform.SetParent(newPot.transform);
             effect.transform.localPosition = Vector3.zero;
 
             //createProperCopy
-            effect = Effect;
+            //effect = Effect;
 
             newPot.effect = effect;
 

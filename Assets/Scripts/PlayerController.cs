@@ -11,7 +11,6 @@ public class PlayerController : CharacterController
     public bool isJumpingAxisUsed, isPreparing, isThrowing, isPickingUp;
     #endregion
 
-
     public SpriteRenderer PlayerGFX;
 
     public bool IsFrozen, IsPoisoned;
@@ -20,6 +19,10 @@ public class PlayerController : CharacterController
     public List<CaseBaseClass> CaseIngridients;
     public List<EffectBaseClass> EffectIngridients;
     public List<Potion> CurrentPotions;
+
+    public MakeAChoice potionSelect, CaseSelect, EffectSelect;
+
+    int PotionSelector, EffectSelector, CaseSelector;
 
     public Potion selectedPotion;
 
@@ -42,7 +45,7 @@ public class PlayerController : CharacterController
     // Start is called before the first frame update
     void Start()
     {
-        
+        currStats.HP = baseStats.HP;   
     }
 
     // Update is called once per frame
@@ -78,7 +81,7 @@ public class PlayerController : CharacterController
             isJumpingAxisUsed = false;
         }
 
-        if (Input.GetAxis("Fire1") != 0 && !isThrowing && isTouchingFloor)
+        if (Input.GetAxis("Fire1") != 0 && !isThrowing && isTouchingFloor && selectedPotion != null)
         {
             isPreparing = true;
             foreach (var item in PlayerControllers)
@@ -90,7 +93,7 @@ public class PlayerController : CharacterController
             }
             isThrowing = true;
         }
-        else if (Input.GetAxis("Fire1") == 0 && isPreparing && CurrentPotions.Count > 0)
+        else if (Input.GetAxis("Fire1") == 0 && isPreparing)
         {
             foreach (var item in PlayerControllers)
             {
@@ -115,7 +118,7 @@ public class PlayerController : CharacterController
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            CreatePotion(0 , 0);
+            CreatePotion(CaseSelector , EffectSelector);
         }
 
     }
@@ -127,8 +130,8 @@ public class PlayerController : CharacterController
             Potion pot = GameController.CreatePotion(CaseIngridients[Case], EffectIngridients[Effect]);
             pot.transform.SetParent(transform);
             pot.transform.localPosition = Vector3.zero;
-            CaseIngridients.RemoveAt(0);
-            EffectIngridients.RemoveAt(0);
+            CaseIngridients.RemoveAt(Case);
+            EffectIngridients.RemoveAt(Effect);
             CurrentPotions.Add(pot);
         }
     }
@@ -158,19 +161,20 @@ public class PlayerController : CharacterController
     
     }
 
-    public override void GetHit()
+    public override void GetHit(float power, Vector3 direction)
     {
 
-        base.GetHit();
         DisableAllControllers();
-        Vector2 hitVector = returnForward() * -1;
 
         if (isTouchingFloor)
         {
-            hitVector += (Vector2.up * 0.25f);
+            direction += (Vector3.up * 0.25f);
         }
         rb.velocity = Vector2.zero;
-        rb.AddForce(hitVector.normalized, ForceMode2D.Impulse);
+
+        float finalPower = power * ((float)baseStats.HP / (float)currStats.HP);
+
+        rb.AddForce(direction.normalized * finalPower, ForceMode2D.Impulse);
 
         Invoke("EnableAllControllers", 0.25f);
     }
@@ -258,6 +262,7 @@ public class PlayerController : CharacterController
                 if (PoisonTime % 1 == 0)
                 {
                     currStats.HP -= damage;
+                    HPChangedEvent.Invoke();
                 }
             }
             IsPoisoned = false;
@@ -276,6 +281,17 @@ public class PlayerController : CharacterController
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.tag == "PotionEffect")
+        {
+            EffectBaseClass effect = collision.gameObject.GetComponent<EffectBaseClass>();
+
+            effect.doEffect(this);
+
+            Vector3 direction = transform.position - collision.transform.position;
+
+            GetHit(effect.damage, direction);
+        }
+
         if (collision.tag == "Pickup")
         {
             OverlappingPickups.Add(collision.GetComponent<PickupBase>());
@@ -296,6 +312,111 @@ public class PlayerController : CharacterController
 
         CaseIngridients.Remove(Case);
         EffectIngridients.Remove(Effect);
+
+    }
+
+    public int getSelector(ListType list)
+    {
+        switch (list)
+        {
+            case ListType.Potion:
+                return PotionSelector;
+            case ListType.Case:
+                return CaseSelector;
+            case ListType.Effect:
+                return EffectSelector;
+            default:
+                return -1;
+        }
+    }
+
+    public int getListCount(ListType list)
+    {
+        switch (list)
+        {
+            case ListType.Potion:
+                return CurrentPotions.Count;
+            case ListType.Case:
+                return CaseIngridients.Count;
+            case ListType.Effect:
+                return EffectIngridients.Count;
+            default:
+                return -1;
+        }
+
+    }
+
+    public void setSelector(ListType list, int newNum)
+    {
+        switch (list)
+        {
+            case ListType.Potion:
+                PotionSelector = newNum;
+                break;
+            case ListType.Case:
+                CaseSelector = newNum;
+                break;
+            case ListType.Effect:
+                EffectSelector = newNum;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public string increaseSelector(ListType list)
+    {
+        int currSelect = getSelector(list);
+
+        if (currSelect >= getListCount(list) - 1)
+            setSelector(list, 0);
+        else
+            setSelector(list, currSelect + 1);
+
+
+
+        switch (list)
+        {
+            case ListType.Potion:
+                if (CurrentPotions.Count > 0)
+                {
+                    selectedPotion = CurrentPotions[PotionSelector];
+                }
+                return CurrentPotions[getSelector(list)].name;
+            case ListType.Case:
+                return CaseIngridients[getSelector(list)].name;
+            case ListType.Effect:
+                return EffectIngridients[getSelector(list)].name;
+            default:
+                return "";
+        }
+
+    }
+
+    public string decreaseSelector(ListType list)
+    {
+        int currSelect = getSelector(list);
+
+        if (currSelect <= 0)
+            setSelector(list, getListCount(list) - 1);
+        else
+            setSelector(list, 0);
+
+        switch (list)
+        {
+            case ListType.Potion:
+                if (CurrentPotions.Count > 0)
+                {
+                    selectedPotion = CurrentPotions[PotionSelector];
+                }
+                return CurrentPotions[getSelector(list)].name;
+            case ListType.Case:
+                return CaseIngridients[getSelector(list)].name;
+            case ListType.Effect:
+                return EffectIngridients[getSelector(list)].name;
+            default:
+                return "";
+        }
 
     }
 }

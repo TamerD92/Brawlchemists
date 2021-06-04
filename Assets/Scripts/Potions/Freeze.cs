@@ -4,8 +4,6 @@ using UnityEngine;
 
 class Freeze : EffectBaseClass
 {
-    public int damage;
-
     public float time;
 
     public override void doEffect(PlayerController player)

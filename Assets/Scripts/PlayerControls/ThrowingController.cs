@@ -37,10 +37,11 @@ public class ThrowingController : BaseController
         if (mainController.selectedPotion == null)
         {
             mainController.selectedPotion = mainController.CurrentPotions[0];
-            mainController.selectedPotion.transform.SetParent(ThrowTransform);
+            
         }
         ThrowStrength = 0;
         mainController.selectedPotion.gameObject.SetActive(true);
+        mainController.selectedPotion.transform.SetParent(ThrowTransform);
         mainController.selectedPotion.transform.position = ThrowTransform.position;
 
         mainController.DisableAllOtherControllers(this);

@@ -13,6 +13,8 @@ public class CharacterController : MonoBehaviour
     public List<StatusEffect> Effects;
     public Rigidbody2D rb;
 
+    public LifeBarController LifeBar;
+
     public bool isTouchingFloor;
     public bool isTouchingWall;
     public bool isFacingLeft;
@@ -21,7 +23,7 @@ public class CharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -57,12 +59,16 @@ public class CharacterController : MonoBehaviour
     { }
 
     public virtual void HPChanged()
-    { }
+    {
+        float newRatio = (float)currStats.HP / (float)baseStats.HP;
+
+        LifeBar.SetSize(newRatio);
+    }
 
     public virtual void Spawn(Transform point)
     { }
 
-    public virtual void GetHit()
+    public virtual void GetHit(float power, Vector3 direction)
     { 
         
     }
@@ -102,6 +108,7 @@ public class CharacterController : MonoBehaviour
     public void takeDamage(int damage)
     {
         currStats.HP -= damage;
+        HPChangedEvent.Invoke();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -137,4 +144,5 @@ public class CharacterController : MonoBehaviour
             OnLeaveWall.Invoke();
         }
     }
+
 }
