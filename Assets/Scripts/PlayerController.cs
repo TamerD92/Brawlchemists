@@ -51,6 +51,11 @@ public class PlayerController : CharacterController
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         foreach (var item in PlayerControllers)
         {
             if (item is WalkerController)
