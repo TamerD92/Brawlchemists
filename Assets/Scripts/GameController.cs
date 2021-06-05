@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviourPunCallbacks
 {
     public const float GRAVITY_SCALE = 3;
 
@@ -76,6 +77,11 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
         PickupTimer += Time.deltaTime;
 
         if (PickupTimer >= PICKUP_TIME && PickupAmount < PICKUP_LIMIT)

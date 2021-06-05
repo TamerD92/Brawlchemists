@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : MonoBehaviourPunCallbacks
 {
     public UnityEvent HPChangedEvent, GotHitEvent, ObjectDiedEvent, OnSpawnEvent, OnDespawnEvent, OnTouchingFloor, OnLeaveFloor, OnTouchWall, OnLeaveWall;
 
@@ -29,6 +30,11 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (isTouchingFloor)
         {
             if (!CheckDownCollision())

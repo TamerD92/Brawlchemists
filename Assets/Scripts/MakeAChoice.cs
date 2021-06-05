@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public enum ListType { Potion, Case, Effect }
 
-public class MakeAChoice : MonoBehaviour
+public class MakeAChoice : MonoBehaviourPunCallbacks
 {
     public PlayerController mainController;
 
@@ -21,13 +22,18 @@ public class MakeAChoice : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!photonView.IsMine)
+        {
+            gameObject.SetActive(false);
+        }
+
         //SelectedIngrediantOne();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isChoosen)
+        if (isChoosen && photonView.IsMine)
         {
             ChooseIngrediant();
         }
