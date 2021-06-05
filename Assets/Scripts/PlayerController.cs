@@ -296,6 +296,11 @@ public class PlayerController : CharacterController
         {
             OverlappingPickups.Add(collision.GetComponent<PickupBase>());
         }
+
+        if (collision.tag == "DeadZone")
+        {
+            ObjectDiedEvent.Invoke();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

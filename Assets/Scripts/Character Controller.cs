@@ -63,6 +63,11 @@ public class CharacterController : MonoBehaviour
         float newRatio = (float)currStats.HP / (float)baseStats.HP;
 
         LifeBar.SetSize(newRatio);
+
+        if (currStats.HP <= 0)
+        {
+            ObjectDiedEvent.Invoke();
+        }
     }
 
     public virtual void Spawn(Transform point)
@@ -74,7 +79,9 @@ public class CharacterController : MonoBehaviour
     }
 
     public virtual void Die()
-    { }
+    { 
+        //Add Online logic for character death;
+    }
 
     public virtual void AddStatus(StatusEffect eff)
     { }

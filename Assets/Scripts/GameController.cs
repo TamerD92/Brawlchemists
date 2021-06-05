@@ -7,6 +7,14 @@ public class GameController : MonoBehaviour
 {
     public const float GRAVITY_SCALE = 3;
 
+    public const float PICKUP_TIME = 1;
+
+    public const int PICKUP_LIMIT = 15;
+
+    public int PickupAmount;
+
+    public float PickupTimer;
+
     public Transform PlayerReference;
 
     public Potion potionPrefab;
@@ -33,6 +41,9 @@ public class GameController : MonoBehaviour
     void Start()
     {
         instance = this;
+
+        PickupAmount = 0;
+        PickupTimer = 0;
 
         potionList = new List<Potion>();
         EffectsPool = new List<EffectBaseClass>();
@@ -65,9 +76,17 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        PickupTimer += Time.deltaTime;
+
+        if (PickupTimer >= PICKUP_TIME && PickupAmount < PICKUP_LIMIT)
         {
             GeneratePickup();
+            PickupTimer = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            //GeneratePickup();
         }
     }
 
@@ -98,6 +117,8 @@ public class GameController : MonoBehaviour
         finalWorldPos.x = Random.Range(baseLocation.Start.position.x, baseLocation.End.position.x);
 
         pickup.transform.position = finalWorldPos;
+
+        PickupAmount++;
     }
 
     public static Potion CreatePotion(CaseBaseClass Case, EffectBaseClass Effect)
@@ -151,5 +172,7 @@ public class GameController : MonoBehaviour
     {
         pickup.transform.SetParent(PickupPoolTransform);
         pickup.transform.localPosition = Vector3.zero;
+
+        PickupAmount--;
     }
 }

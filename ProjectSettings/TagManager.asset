@@ -9,6 +9,7 @@ TagManager:
   - Potion
   - Pickup
   - PotionEffect
+  - DeadZone
   layers:
   - Default
   - TransparentFX
