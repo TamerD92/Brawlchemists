@@ -41,7 +41,16 @@ public class GameController : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
+
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
 
         PickupAmount = 0;
         PickupTimer = 0;
