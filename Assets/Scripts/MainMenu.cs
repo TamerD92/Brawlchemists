@@ -1,30 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
 
     public string findAMatch;
+    public string lobby;
     public string settings;
     public string backToMainMenu;
     public string gameplay;
 
     public void FindAMatch()
     {
-        Application.LoadLevel(findAMatch);
+        SceneManager.LoadScene(findAMatch);
+    }
+    public void Lobby()
+    {
+        SceneManager.LoadScene(lobby);
     }
     public void Gameplay()
     {
-        Application.LoadLevel(gameplay);
+        SceneManager.LoadScene(gameplay);
     }
     public void Settings()
     {
-        Application.LoadLevel(settings);
+        SceneManager.LoadScene(settings);
     }
     public void BackToMainMenu()
     {
-        Application.LoadLevel(backToMainMenu);
+        SceneManager.LoadScene(backToMainMenu);
     }
     public void QuitGame()
     {
