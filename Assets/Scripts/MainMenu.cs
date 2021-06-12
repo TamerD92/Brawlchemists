@@ -7,7 +7,6 @@ public class MainMenu : MonoBehaviour
 {
 
     public string findAMatch;
-    public string lobby;
     public string settings;
     public string backToMainMenu;
     public string gameplay;
@@ -15,10 +14,6 @@ public class MainMenu : MonoBehaviour
     public void FindAMatch()
     {
         SceneManager.LoadScene(findAMatch);
-    }
-    public void Lobby()
-    {
-        SceneManager.LoadScene(lobby);
     }
     public void Gameplay()
     {
