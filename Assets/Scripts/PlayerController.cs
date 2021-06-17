@@ -45,6 +45,7 @@ public class PlayerController : CharacterController
     // Start is called before the first frame update
     void Start()
     {
+        Init();
         currStats.HP = baseStats.HP;   
     }
 

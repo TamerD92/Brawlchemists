@@ -62,7 +62,7 @@ namespace Com.MyCompany.MyGame
         /// </summary>
         void Start()
         {
-            Connect();
+            //Connect();
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);
         }
@@ -141,7 +141,7 @@ namespace Com.MyCompany.MyGame
 
                 // #Critical
                 // Load the Room Level.
-                PhotonNetwork.LoadLevel("Room for 1");
+                PhotonNetwork.LoadLevel("Lobby");
             }
         }
 
