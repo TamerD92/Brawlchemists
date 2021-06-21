@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58ac7cb7e4aedc4eac8c1c0f59f8e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findAMatch: Lobby
+  findAMatch: Gameplay
   settings: Settings
   backToMainMenu: Main Menu
   gameplay: Gameplay
@@ -1195,7 +1195,6 @@ GameObject:
   - component: {fileID: 1815570429}
   - component: {fileID: 1815570428}
   - component: {fileID: 1815570427}
-  - component: {fileID: 1815570430}
   m_Layer: 5
   m_Name: Find a Match
   m_TagString: Untagged
@@ -1316,21 +1315,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1815570425}
   m_CullTransparentMesh: 0
---- !u!114 &1815570430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1815570425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4796bc1963eb34e1fa021b0a45b29df4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxPlayersPerRoom: 4
-  controlPanel: {fileID: 754745503}
-  progressLabel: {fileID: 1249131213}
 --- !u!1 &1826451254
 GameObject:
   m_ObjectHideFlags: 0

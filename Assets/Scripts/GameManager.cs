@@ -79,7 +79,7 @@ namespace Com.MyCompany.MyGame
                 Debug.LogFormat("OnPlayerEnteredRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
 
 
-                LoadArena();
+                //LoadArena();
             }
         }
 
@@ -89,13 +89,6 @@ namespace Com.MyCompany.MyGame
             Debug.LogFormat("OnPlayerLeftRoom() {0}", other.NickName); // seen when other disconnects
 
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                Debug.LogFormat("OnPlayerLeftRoom IsMasterClient {0}", PhotonNetwork.IsMasterClient); // called before OnPlayerLeftRoom
-
-
-                LoadArena();
-            }
         }
 
 
