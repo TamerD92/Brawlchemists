@@ -21,6 +21,8 @@ public class CharacterController : MonoBehaviourPunCallbacks
     public bool isTouchingWall;
     public bool isFacingLeft;
 
+    public CameraWork Camera;
+
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +48,10 @@ public class CharacterController : MonoBehaviourPunCallbacks
         }
     }
 
+    public void LateUpdate()
+    {
+        
+    }
 
     protected bool CheckDownCollision()
     {

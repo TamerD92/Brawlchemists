@@ -31,6 +31,19 @@ public class PlayerController : CharacterController
     public override void Init()
     {
         base.Init();
+
+        if (Camera != null)
+        {
+            if (photonView.IsMine)
+            {
+                Camera.OnStartFollowing();
+            }
+        }
+        else
+        {
+            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+        }
+
         OverlappingPickups = new List<PickupBase>();
         
         EffectIngridients = new List<EffectBaseClass>();
