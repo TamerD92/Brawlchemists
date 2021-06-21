@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerController : CharacterController
@@ -127,7 +128,7 @@ public class PlayerController : CharacterController
 
         if (Input.GetAxis("Pickup") != 0 && OverlappingPickups.Count > 0 && !isPickingUp)
         {
-            OverlappingPickups[0].Collect(this);
+            photonView.RPC("CollectPickup", RpcTarget.All);
             isPickingUp = true;
         }
         else if (Input.GetAxis("Pickup") == 0)
@@ -140,6 +141,12 @@ public class PlayerController : CharacterController
             CreatePotion(CaseSelector , EffectSelector);
         }
 
+    }
+
+    [PunRPC]
+    private void CollectPickup()
+    {
+        OverlappingPickups[0].Collect(this);
     }
 
     private void CreatePotion(int Case, int Effect)

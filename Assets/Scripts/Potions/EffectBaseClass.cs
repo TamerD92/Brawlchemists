@@ -12,6 +12,7 @@ public class EffectBaseClass : MonoBehaviour, EffectInterface
 
     public int damage;
 
+    public Sprite Image;
 
     public virtual void doEffect(PlayerController player)
     {

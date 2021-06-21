@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 2281880653176597545}
   - component: {fileID: 6518733755212024849}
   - component: {fileID: 4743314474164585301}
-  - component: {fileID: 5538798572565909697}
-  - component: {fileID: -1238477501330860026}
-  - component: {fileID: -6128281962649651714}
+  - component: {fileID: 999520410802305038}
+  - component: {fileID: 8902758641179691184}
+  - component: {fileID: -275855048514080354}
   m_Layer: 0
-  m_Name: CasePickupPrefab
+  m_Name: EffectPickupPrefab
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5538798572565909697
+--- !u!114 &999520410802305038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,11 +111,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3632736212922396942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c504e1efa380df44a4397ab7e66bbcd, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b65acd0d2157914a9624b3505a99ce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Case: {fileID: 0}
---- !u!114 &-1238477501330860026
+  image: {fileID: 0}
+  Effect: {fileID: 0}
+--- !u!114 &8902758641179691184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,11 +135,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: -6128281962649651714}
+  - {fileID: -275855048514080354}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-6128281962649651714
+--- !u!114 &-275855048514080354
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

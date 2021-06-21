@@ -60,24 +60,26 @@ public class GameController : MonoBehaviourPunCallbacks
         PickupPool = new List<PickupBase>();
         for (int i = 0; i < 40; i++)
         {
-            Potion newPot = Instantiate(potionPrefab);
-            potionList.Add(newPot);
+            GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, Vector3.zero, Quaternion.identity);
+            potionList.Add(newPot.GetComponent<Potion>());
 
             newPot.transform.SetParent(PotionPoolTransform);
-            newPot.transform.localPosition = Vector3.zero;
-            newPot.preInit();
+            newPot.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            newPot.GetComponent<Potion>().preInit();
 
-            EffectBaseClass eff = Instantiate(EffectsTypes[i%5]);
-            EffectsPool.Add(eff);
+            GameObject eff = PhotonNetwork.Instantiate(EffectsTypes[i % 5].name, Vector3.zero, Quaternion.identity);
+            EffectsPool.Add(eff.GetComponent<EffectBaseClass>());
+
+            Debug.LogError(eff.name);
 
             eff.transform.SetParent(EffectPoolTransform);
-            eff.transform.localPosition = Vector3.zero;
+            eff.transform.localPosition = new Vector3(-1000, -1000, -1000);
 
-            PickupBase pickup = Instantiate(PickupTypes[i % 2]);
-            PickupPool.Add(pickup);
+            GameObject pickup = PhotonNetwork.Instantiate(PickupTypes[i % 2].name, Vector3.zero, Quaternion.identity);
+            PickupPool.Add(pickup.GetComponent<PickupBase>());
 
             pickup.transform.SetParent(PickupPoolTransform);
-            pickup.transform.localPosition = Vector3.zero;
+            pickup.transform.localPosition = new Vector3(-1000,-1000,-1000);
         }
 
         
@@ -169,24 +171,27 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
     public void ReturnToPool(Potion potion)
     {
         potion.transform.SetParent(PotionPoolTransform);
-        potion.transform.localPosition = Vector3.zero;
+        potion.transform.localPosition = new Vector3(-1000, -1000, -1000);
         //potion.gameObject.SetActive(false);
-    }
-
+    } 
+    
+    [PunRPC]
     public void ReturnToPool(EffectBaseClass effect)
     {
         effect.transform.SetParent(EffectPoolTransform);
-        effect.transform.localPosition = Vector3.zero;
+        effect.transform.localPosition = new Vector3(-1000, -1000, -1000);
         effect.gameObject.SetActive(false);
     }
-
+    
+    [PunRPC]
     public void ReturnToPool(PickupBase pickup)
     {
         pickup.transform.SetParent(PickupPoolTransform);
-        pickup.transform.localPosition = Vector3.zero;
+        pickup.transform.localPosition = new Vector3(-1000, -1000, -1000);
 
         PickupAmount--;
     }
