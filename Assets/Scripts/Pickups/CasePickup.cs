@@ -8,9 +8,9 @@ public class CasePickup : PickupBase
 
     public override void Generate()
     {
-        int ID = Random.Range(0, GameController.instance.CaseTypes.Length);
+        int ID = Random.Range(0, GameController.instance.database.CaseTypes.Length);
 
-        Case = GameController.instance.CaseTypes[ID];
+        Case = GameController.instance.database.CaseTypes[ID];
 
         //base.Generate();
     }

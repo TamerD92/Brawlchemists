@@ -20,11 +20,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public Potion potionPrefab;
 
-    public EffectBaseClass[] EffectsTypes;
-
-    public CaseBaseClass[] CaseTypes;
-
-    public PickupBase[] PickupTypes;
+    public ObjectDatabase database;
 
     public List<Potion> potionList;
 
@@ -67,15 +63,15 @@ public class GameController : MonoBehaviourPunCallbacks
             newPot.transform.localPosition = new Vector3(-1000, -1000, -1000);
             newPot.GetComponent<Potion>().preInit();
 
-            GameObject eff = PhotonNetwork.Instantiate(EffectsTypes[i % 5].name, Vector3.zero, Quaternion.identity);
+            GameObject eff = PhotonNetwork.Instantiate(database.EffectsTypes[i % 5].name, Vector3.zero, Quaternion.identity);
             EffectsPool.Add(eff.GetComponent<EffectBaseClass>());
 
-            Debug.LogError(eff.name);
+            //Debug.LogError(eff.name);
 
             eff.transform.SetParent(EffectPoolTransform);
             eff.transform.localPosition = new Vector3(-1000, -1000, -1000);
 
-            GameObject pickup = PhotonNetwork.Instantiate(PickupTypes[i % 2].name, Vector3.zero, Quaternion.identity);
+            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, Vector3.zero, Quaternion.identity);
             PickupPool.Add(pickup.GetComponent<PickupBase>());
 
             pickup.transform.SetParent(PickupPoolTransform);

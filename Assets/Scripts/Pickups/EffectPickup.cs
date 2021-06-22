@@ -9,9 +9,9 @@ public class EffectPickup : PickupBase
 
     public override void Generate()
     {
-        int ID = Random.Range(0, GameController.instance.EffectsTypes.Length);
+        int ID = Random.Range(0, GameController.instance.database.EffectsTypes.Length);
 
-        Effect = GameController.instance.EffectsTypes.First(o => o.ID == ID);
+        Effect = GameController.instance.database.EffectsTypes.First(o => o.ID == ID);
 
         base.Generate();
     }

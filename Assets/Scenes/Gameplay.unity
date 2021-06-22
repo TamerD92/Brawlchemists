@@ -1391,18 +1391,7 @@ MonoBehaviour:
   PickupTimer: 5
   PlayerReference: {fileID: 0}
   potionPrefab: {fileID: 6679618110489123205, guid: b0e9bdcd3df21534d8ced34f34aa1c8a, type: 3}
-  EffectsTypes:
-  - {fileID: -5528700702367976575, guid: 5fa46d41841ac5a449c6353ad313587c, type: 3}
-  - {fileID: 8871489742374921247, guid: 24f72d43b6a90fe44b7fe451608a0377, type: 3}
-  - {fileID: -5010596735790773951, guid: ddad781f94a4c4c4c9be5ef6175d24bc, type: 3}
-  - {fileID: 3672758358718106359, guid: e3537671457e0df4596fae8ab43706b6, type: 3}
-  - {fileID: -8278636099332914638, guid: 92c46f90ad50c7c4bbe21a3fe5a68241, type: 3}
-  CaseTypes:
-  - {fileID: 11400000, guid: ed47d5281884da74a9f77f295c00bdd9, type: 2}
-  - {fileID: 11400000, guid: 36a548937a583474fa2e5981842b0d1c, type: 2}
-  PickupTypes:
-  - {fileID: 5538798572565909697, guid: 20be58a326dd8d34c9339f73405d9d00, type: 3}
-  - {fileID: 999520410802305038, guid: b0e0c92e33a5db54ca29535e3a1fa4bd, type: 3}
+  database: {fileID: 11400000, guid: 373ec2d4f3f054c40832fee67e13d14f, type: 2}
   potionList: []
   PickupPool: []
   PotionPoolTransform: {fileID: 757644344}
