@@ -18,7 +18,6 @@ public class EffectPickup : PickupBase
 
     public override void Collect(PlayerController player)
     {
-        Debug.LogError("Player " + player.name + " Picked up pickup: " + Effect.name);
 
         player.EffectIngridients.Add(Effect);
         base.Collect(player);

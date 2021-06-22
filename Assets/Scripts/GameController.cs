@@ -43,11 +43,23 @@ public class GameController : MonoBehaviourPunCallbacks
             instance = this;
         }
 
-        if (!PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
-            return;
+            photonView.RPC("GeneratePools", RpcTarget.MasterClient);
+        }
+        else
+        {
+            foreach (var item in GetComponents<Potion>())
+            {
+                item.gameObject.SetActive(false);
+            }
         }
 
+    }
+
+    [PunRPC]
+    private void GeneratePools()
+    {
         PickupAmount = 0;
         PickupTimer = 0;
 
@@ -57,6 +69,7 @@ public class GameController : MonoBehaviourPunCallbacks
         for (int i = 0; i < 40; i++)
         {
             GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, Vector3.zero, Quaternion.identity);
+            newPot.SetActive(false);
             potionList.Add(newPot.GetComponent<Potion>());
 
             newPot.transform.SetParent(PotionPoolTransform);
@@ -64,9 +77,10 @@ public class GameController : MonoBehaviourPunCallbacks
             newPot.GetComponent<Potion>().preInit();
 
             GameObject eff = PhotonNetwork.Instantiate(database.EffectsTypes[i % 5].name, Vector3.zero, Quaternion.identity);
+            eff.name = "Effect" + database.EffectsTypes[i % 5].name;
+            eff.SetActive(false);
             EffectsPool.Add(eff.GetComponent<EffectBaseClass>());
 
-            //Debug.LogError(eff.name);
 
             eff.transform.SetParent(EffectPoolTransform);
             eff.transform.localPosition = new Vector3(-1000, -1000, -1000);
@@ -75,10 +89,8 @@ public class GameController : MonoBehaviourPunCallbacks
             PickupPool.Add(pickup.GetComponent<PickupBase>());
 
             pickup.transform.SetParent(PickupPoolTransform);
-            pickup.transform.localPosition = new Vector3(-1000,-1000,-1000);
+            pickup.transform.localPosition = new Vector3(-1000, -1000, -1000);
         }
-
-        
     }
 
     // Update is called once per frame
@@ -105,8 +117,8 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void GeneratePickup()
     {
-
         PickupBase pickup;
+
         Vector3 finalWorldPos = new Vector3();
 
         int type = Random.Range(0, 100);
@@ -166,6 +178,23 @@ public class GameController : MonoBehaviourPunCallbacks
             return null;
         }
     }
+
+    public void ReturnToPoolBase(object obj)
+    {
+        if (obj is Potion)
+        {
+            photonView.RPC("ReturnToPool", RpcTarget.MasterClient, obj as Potion);
+        }
+        else if (obj is EffectBaseClass)
+        {
+            photonView.RPC("ReturnToPool", RpcTarget.MasterClient, obj as EffectBaseClass);
+        }
+        else if (obj is PickupBase)
+        {
+            photonView.RPC("ReturnToPool", RpcTarget.MasterClient, obj as PickupBase);
+        }
+    }
+
 
     [PunRPC]
     public void ReturnToPool(Potion potion)

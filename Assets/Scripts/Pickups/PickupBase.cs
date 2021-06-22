@@ -14,6 +14,6 @@ public class PickupBase : MonoBehaviour
     [PunRPC]
     public virtual void Collect(PlayerController player)
     {
-        GameController.instance.ReturnToPool(this);
+        GameController.instance.ReturnToPoolBase(this);
     }
 }

@@ -68,6 +68,7 @@ MonoBehaviour:
   - {fileID: 539055189330301704}
   Duration: 1
   damage: 10
+  Image: {fileID: 0}
 --- !u!114 &8224219867623431436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!1 &9161588260704510113
 GameObject:

@@ -71,7 +71,7 @@ public class Potion : MonoBehaviour
 
         effect.gameObject.SetActive(true);
 
-        GameController.instance.ReturnToPool(this);
+        GameController.instance.ReturnToPoolBase(this);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

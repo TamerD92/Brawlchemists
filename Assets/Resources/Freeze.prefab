@@ -161,6 +161,7 @@ MonoBehaviour:
   - {fileID: 1473253122205888191}
   Duration: 2
   damage: 2
+  Image: {fileID: 0}
   time: 3
 --- !u!114 &34332191709287687
 MonoBehaviour:
@@ -180,7 +181,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -4625244482474283190}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -198,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!114 &2987378818776278495
 MonoBehaviour:
@@ -218,7 +220,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -4625244482474283190}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

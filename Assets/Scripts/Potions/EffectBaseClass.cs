@@ -24,7 +24,7 @@ public class EffectBaseClass : MonoBehaviour, EffectInterface
         Duration -= Time.deltaTime;
         if (Duration <= 0)
         {
-            GameController.instance.ReturnToPool(this);
+            GameController.instance.ReturnToPoolBase(this);
         }
     }
 }

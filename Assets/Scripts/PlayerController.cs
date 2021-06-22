@@ -128,7 +128,7 @@ public class PlayerController : CharacterController
 
         if (Input.GetAxis("Pickup") != 0 && OverlappingPickups.Count > 0 && !isPickingUp)
         {
-            photonView.RPC("CollectPickup", RpcTarget.All);
+            CollectPickup();
             isPickingUp = true;
         }
         else if (Input.GetAxis("Pickup") == 0)
@@ -143,7 +143,6 @@ public class PlayerController : CharacterController
 
     }
 
-    [PunRPC]
     private void CollectPickup()
     {
         OverlappingPickups[0].Collect(this);
