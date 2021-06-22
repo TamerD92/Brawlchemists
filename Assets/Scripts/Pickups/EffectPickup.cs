@@ -2,18 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Photon.Pun;
 
 public class EffectPickup : PickupBase
 {
+
     public EffectBaseClass Effect;
-
-    public override void Generate()
+    
+    [PunRPC]
+    public override void Generate(int number)
     {
-        int ID = Random.Range(0, GameController.instance.database.EffectsTypes.Length);
+        Effect = GameController.instance.database.EffectsTypes.First(o => o.ID == number);
+    }
 
-        Effect = GameController.instance.database.EffectsTypes.First(o => o.ID == ID);
+    public override void OnlineGenerate()
+    {
+        int ID = Random.Range(0, GameController.instance.database.CaseTypes.Length);
 
-        base.Generate();
+        photonView.RPC("Generate", RpcTarget.AllBufferedViaServer, ID);
+
     }
 
     public override void Collect(PlayerController player)

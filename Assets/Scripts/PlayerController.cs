@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerController : CharacterController
+public class PlayerController : CharacterController, IPunObservable
 {
     #region controllers
     public BaseController[] PlayerControllers;
@@ -145,6 +145,11 @@ public class PlayerController : CharacterController
 
     private void CollectPickup()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         OverlappingPickups[0].Collect(this);
     }
 
@@ -306,6 +311,11 @@ public class PlayerController : CharacterController
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (collision.tag == "PotionEffect")
         {
             EffectBaseClass effect = collision.gameObject.GetComponent<EffectBaseClass>();
@@ -330,6 +340,11 @@ public class PlayerController : CharacterController
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (collision.tag == "Pickup")
         {
             OverlappingPickups.Remove(collision.GetComponent<PickupBase>());
@@ -448,5 +463,22 @@ public class PlayerController : CharacterController
                 return "";
         }
 
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+
+            if (stream.IsWriting)
+            {
+                // We own this player: send the others our data
+                stream.SendNext(isFacingLeft);
+            }
+            else
+            {
+            // Network player, receive data
+            isFacingLeft = (bool)stream.ReceiveNext();
+            }
+
+       
     }
 }

@@ -45,16 +45,8 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            photonView.RPC("GeneratePools", RpcTarget.MasterClient);
+            photonView.RPC("GeneratePools", RpcTarget.AllBufferedViaServer);
         }
-        else
-        {
-            foreach (var item in GetComponents<Potion>())
-            {
-                item.gameObject.SetActive(false);
-            }
-        }
-
     }
 
     [PunRPC]
@@ -68,28 +60,27 @@ public class GameController : MonoBehaviourPunCallbacks
         PickupPool = new List<PickupBase>();
         for (int i = 0; i < 40; i++)
         {
-            GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, Vector3.zero, Quaternion.identity);
+            GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
             newPot.SetActive(false);
             potionList.Add(newPot.GetComponent<Potion>());
 
             newPot.transform.SetParent(PotionPoolTransform);
-            newPot.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            newPot.transform.position = new Vector3(-1000, -1000, -1000);
             newPot.GetComponent<Potion>().preInit();
 
-            GameObject eff = PhotonNetwork.Instantiate(database.EffectsTypes[i % 5].name, Vector3.zero, Quaternion.identity);
+            GameObject eff = PhotonNetwork.Instantiate(database.EffectsTypes[i % 5].name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
             eff.name = "Effect" + database.EffectsTypes[i % 5].name;
             eff.SetActive(false);
             EffectsPool.Add(eff.GetComponent<EffectBaseClass>());
 
-
             eff.transform.SetParent(EffectPoolTransform);
-            eff.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            eff.transform.position = new Vector3(-1000, -1000, -1000);
 
-            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, Vector3.zero, Quaternion.identity);
+            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
             PickupPool.Add(pickup.GetComponent<PickupBase>());
 
             pickup.transform.SetParent(PickupPoolTransform);
-            pickup.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            pickup.transform.position = new Vector3(-1000, -1000, -1000);
         }
     }
 
@@ -134,7 +125,7 @@ public class GameController : MonoBehaviourPunCallbacks
         PickupPool.Remove(pickup);
 
         pickup.transform.SetParent(null);
-        pickup.Generate();
+        pickup.OnlineGenerate();
 
         GroundLinesStruct baseLocation = GroundLines[Random.Range(0, GroundLines.Length - 1)];
 
@@ -142,9 +133,11 @@ public class GameController : MonoBehaviourPunCallbacks
         finalWorldPos.x = Random.Range(baseLocation.Start.position.x, baseLocation.End.position.x);
 
         pickup.transform.position = finalWorldPos;
+        pickup.gameObject.SetActive(true);
 
         PickupAmount++;
     }
+
 
     public static Potion CreatePotion(CaseBaseClass Case, EffectBaseClass Effect)
     {
@@ -181,17 +174,19 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void ReturnToPoolBase(object obj)
     {
+        
+
         if (obj is Potion)
         {
-            photonView.RPC("ReturnToPool", RpcTarget.MasterClient, obj as Potion);
+            ReturnToPool(obj as Potion);
         }
         else if (obj is EffectBaseClass)
         {
-            photonView.RPC("ReturnToPool", RpcTarget.MasterClient, obj as EffectBaseClass);
+            ReturnToPool(obj as EffectBaseClass);
         }
         else if (obj is PickupBase)
         {
-            photonView.RPC("ReturnToPool", RpcTarget.MasterClient, obj as PickupBase);
+            ReturnToPool(obj as PickupBase);
         }
     }
 
@@ -199,25 +194,42 @@ public class GameController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ReturnToPool(Potion potion)
     {
-        potion.transform.SetParent(PotionPoolTransform);
-        potion.transform.localPosition = new Vector3(-1000, -1000, -1000);
-        //potion.gameObject.SetActive(false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            potion.transform.SetParent(PotionPoolTransform);
+            potion.gameObject.SetActive(false);
+            potionList.Add(potion);
+            potion.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            //potion.gameObject.SetActive(false);
+        }
     } 
     
     [PunRPC]
     public void ReturnToPool(EffectBaseClass effect)
     {
-        effect.transform.SetParent(EffectPoolTransform);
-        effect.transform.localPosition = new Vector3(-1000, -1000, -1000);
-        effect.gameObject.SetActive(false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            effect.transform.SetParent(EffectPoolTransform);
+            EffectsPool.Add(effect);
+            effect.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            effect.gameObject.SetActive(false);
+        }
     }
     
     [PunRPC]
     public void ReturnToPool(PickupBase pickup)
     {
-        pickup.transform.SetParent(PickupPoolTransform);
-        pickup.transform.localPosition = new Vector3(-1000, -1000, -1000);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            pickup.transform.SetParent(PickupPoolTransform);
+            pickup.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            PickupPool.Add(pickup);
+            PickupAmount--;
 
-        PickupAmount--;
+
+        }
+
+        pickup.gameObject.SetActive(false);
+
     }
 }

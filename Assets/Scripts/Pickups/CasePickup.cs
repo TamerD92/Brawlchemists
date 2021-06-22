@@ -1,18 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CasePickup : PickupBase
 {
     public CaseBaseClass Case;
 
-    public override void Generate()
+    [PunRPC]
+    public override void Generate(int number)
+    {
+        Case = GameController.instance.database.CaseTypes[number];
+    }
+
+    public override void OnlineGenerate()
     {
         int ID = Random.Range(0, GameController.instance.database.CaseTypes.Length);
 
-        Case = GameController.instance.database.CaseTypes[ID];
+        photonView.RPC("Generate", RpcTarget.AllBufferedViaServer, ID);
 
-        //base.Generate();
     }
 
     public override void Collect(PlayerController player)

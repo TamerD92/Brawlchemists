@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Potion : MonoBehaviour
+public class Potion : MonoBehaviour, IPunInstantiateMagicCallback, IPunObservable
 {
     public EffectBaseClass effect;
 
@@ -81,6 +82,25 @@ public class Potion : MonoBehaviour
         {
             BounceAmount = 0;
             Detonate();
+        }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(gameObject.activeSelf);
+        }
+        else
+        {
+            // Network player, receive data
+            gameObject.SetActive((bool)stream.ReceiveNext());
         }
     }
 }
