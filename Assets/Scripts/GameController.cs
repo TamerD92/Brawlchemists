@@ -47,7 +47,10 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             photonView.RPC("GeneratePools", RpcTarget.AllBufferedViaServer);
         }
+
+        GeneratePotions();
     }
+
 
     [PunRPC]
     private void GeneratePools()
@@ -58,6 +61,18 @@ public class GameController : MonoBehaviourPunCallbacks
         potionList = new List<Potion>();
         EffectsPool = new List<EffectBaseClass>();
         PickupPool = new List<PickupBase>();
+        for (int i = 0; i < 40; i++)
+        {
+            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
+            PickupPool.Add(pickup.GetComponent<PickupBase>());
+
+            pickup.transform.SetParent(PickupPoolTransform);
+            pickup.transform.position = new Vector3(-1000, -1000, -1000);
+        }
+    }
+
+    public void GeneratePotions()
+    {
         for (int i = 0; i < 40; i++)
         {
             GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
@@ -75,12 +90,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
             eff.transform.SetParent(EffectPoolTransform);
             eff.transform.position = new Vector3(-1000, -1000, -1000);
-
-            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
-            PickupPool.Add(pickup.GetComponent<PickupBase>());
-
-            pickup.transform.SetParent(PickupPoolTransform);
-            pickup.transform.position = new Vector3(-1000, -1000, -1000);
         }
     }
 
@@ -178,21 +187,21 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (obj is Potion)
         {
-            ReturnToPool(obj as Potion);
+            ReturnPotionToPool(obj as Potion);
         }
         else if (obj is EffectBaseClass)
         {
-            ReturnToPool(obj as EffectBaseClass);
+            ReturnEffectToPool(obj as EffectBaseClass);
         }
         else if (obj is PickupBase)
         {
-            ReturnToPool(obj as PickupBase);
+            ReturnPickupToPool(obj as PickupBase);
         }
     }
 
 
     [PunRPC]
-    public void ReturnToPool(Potion potion)
+    public void ReturnPotionToPool(Potion potion)
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -205,7 +214,7 @@ public class GameController : MonoBehaviourPunCallbacks
     } 
     
     [PunRPC]
-    public void ReturnToPool(EffectBaseClass effect)
+    public void ReturnEffectToPool(EffectBaseClass effect)
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -217,7 +226,7 @@ public class GameController : MonoBehaviourPunCallbacks
     }
     
     [PunRPC]
-    public void ReturnToPool(PickupBase pickup)
+    public void ReturnPickupToPool(PickupBase pickup)
     {
         if (PhotonNetwork.IsMasterClient)
         {

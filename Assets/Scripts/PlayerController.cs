@@ -157,7 +157,8 @@ public class PlayerController : CharacterController, IPunObservable
     {
         if (CaseIngridients.Count > 0 && EffectIngridients.Count > 0)
         {
-            Potion pot = GameController.CreatePotion(CaseIngridients[Case], EffectIngridients[Effect]);
+            Potion pot;
+            pot = GameController.CreatePotion(CaseIngridients[Case], EffectIngridients[Effect]);
             pot.transform.SetParent(transform);
             pot.transform.localPosition = Vector3.zero;
             CaseIngridients.RemoveAt(Case);

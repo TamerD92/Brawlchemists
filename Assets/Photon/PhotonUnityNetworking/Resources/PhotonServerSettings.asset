@@ -45,6 +45,12 @@ MonoBehaviour:
   - OnlineGenerate
   - placePickupInWorld
   - Generate
+  - Detonate
+  - CreatePotion
+  - returnInstance
+  - ReturnPotionToPool
+  - ReturnEffectToPool
+  - ReturnPickupToPool
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

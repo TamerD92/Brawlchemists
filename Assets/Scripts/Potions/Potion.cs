@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Potion : MonoBehaviour, IPunInstantiateMagicCallback, IPunObservable
+public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, IPunObservable
 {
     public EffectBaseClass effect;
 
@@ -66,22 +66,30 @@ public class Potion : MonoBehaviour, IPunInstantiateMagicCallback, IPunObservabl
         return v;
     }
 
+    [PunRPC]
     public void Detonate()
     {
-        effect.transform.SetParent(null);
+        if (photonView.IsMine)
+        {
 
-        effect.gameObject.SetActive(true);
+            effect.transform.SetParent(null);
+
+            effect.gameObject.SetActive(true);
+
+            effect.transform.rotation = Quaternion.identity;
+        }
 
         GameController.instance.ReturnToPoolBase(this);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
         BounceAmount--;
         if (BounceAmount <= 0 || collision.transform.tag == "Player")
         {
             BounceAmount = 0;
-            Detonate();
+            photonView.RPC("Detonate", RpcTarget.All);
         }
     }
 
@@ -96,11 +104,13 @@ public class Potion : MonoBehaviour, IPunInstantiateMagicCallback, IPunObservabl
         {
             // We own this player: send the others our data
             stream.SendNext(gameObject.activeSelf);
+            stream.SendNext(effect);
         }
         else
         {
             // Network player, receive data
             gameObject.SetActive((bool)stream.ReceiveNext());
+            effect = (EffectBaseClass)stream.ReceiveNext();
         }
     }
 }
