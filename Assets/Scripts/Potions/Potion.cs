@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.Linq;
 
 public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, IPunObservable
 {
@@ -104,13 +105,23 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
         {
             // We own this player: send the others our data
             stream.SendNext(gameObject.activeSelf);
-            stream.SendNext(effect);
+            stream.SendNext(effect.ID);
         }
         else
         {
             // Network player, receive data
             gameObject.SetActive((bool)stream.ReceiveNext());
-            effect = (EffectBaseClass)stream.ReceiveNext();
+
+            if (!effect)
+            {
+                int effID = ((int)stream.ReceiveNext());
+                EffectBaseClass syncEffect = GameController.instance.EffectsPool.Where(o => o.ID == effID).ToList()[0];
+                GameController.instance.EffectsPool.Remove(syncEffect);
+
+                syncEffect.transform.SetParent(transform);
+                syncEffect.transform.localPosition = Vector3.zero;
+                effect = syncEffect;
+            }
         }
     }
 }

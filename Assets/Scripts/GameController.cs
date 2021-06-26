@@ -24,7 +24,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public List<Potion> potionList;
 
-    List<EffectBaseClass> EffectsPool;
+    public List<EffectBaseClass> EffectsPool;
 
     public List<PickupBase> PickupPool;
 
@@ -58,8 +58,6 @@ public class GameController : MonoBehaviourPunCallbacks
         PickupAmount = 0;
         PickupTimer = 0;
 
-        potionList = new List<Potion>();
-        EffectsPool = new List<EffectBaseClass>();
         PickupPool = new List<PickupBase>();
         for (int i = 0; i < 40; i++)
         {
@@ -73,6 +71,10 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void GeneratePotions()
     {
+
+        potionList = new List<Potion>();
+        EffectsPool = new List<EffectBaseClass>();
+
         for (int i = 0; i < 40; i++)
         {
             GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
