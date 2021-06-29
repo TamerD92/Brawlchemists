@@ -5,47 +5,39 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
-public class PickupBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, IPunObservable
+public class PickupBase : MonoBehaviourPunCallbacks
 {
 
     public Sprite image;
     
     [PunRPC]
     public virtual void Generate(int number)
-    { 
-        
+    {
+        gameObject.SetActive(true);
     }
 
     public virtual void OnlineGenerate()
-    { 
-        
+    {
+
     }
 
     public virtual void Collect(PlayerController player)
     {
         
         GameController.instance.ReturnToPoolBase(this);
+        turnOff();
     }
 
-    public void OnPhotonInstantiate(PhotonMessageInfo info)
+
+    public void turnOff()
+    {
+        photonView.RPC("onlineTurnOff", RpcTarget.All);
+    }
+
+    [PunRPC]
+    protected void onlineTurnOff()
     {
         gameObject.SetActive(false);
-    }
-
-    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // We own this player: send the others our data
-            stream.SendNext(gameObject.activeSelf);
-            //stream.SendNext(image);
-        }
-        else
-        {
-            // Network player, receive data
-            gameObject.SetActive((bool)stream.ReceiveNext());
-            //image = (Sprite)stream.ReceiveNext();
-        }
     }
 
  

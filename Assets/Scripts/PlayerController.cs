@@ -29,6 +29,11 @@ public class PlayerController : CharacterController, IPunObservable
 
     public List<PickupBase> OverlappingPickups;
 
+    public bool isBrewing;
+
+    
+    public int ID;
+
     public override void Init()
     {
         base.Init();
@@ -103,6 +108,7 @@ public class PlayerController : CharacterController, IPunObservable
 
         if (Input.GetAxis("Fire1") != 0 && !isThrowing && isTouchingFloor && selectedPotion != null)
         {
+            selectedPotion.DeployPotion(true);
             isPreparing = true;
             foreach (var item in PlayerControllers)
             {
@@ -122,6 +128,7 @@ public class PlayerController : CharacterController, IPunObservable
                     (item as ThrowingController).Throw();
                 }
             }
+            potionSelect.resetIngridiants();
             isThrowing = false;
             isPreparing = false;
         }
@@ -139,6 +146,15 @@ public class PlayerController : CharacterController, IPunObservable
         if (Input.GetKeyDown(KeyCode.G))
         {
             CreatePotion(CaseSelector , EffectSelector);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            isBrewing = !isBrewing;
+
+            EffectSelect.gameObject.SetActive(isBrewing);
+            CaseSelect.gameObject.SetActive(isBrewing);
+            potionSelect.gameObject.SetActive(!isBrewing);
         }
 
     }
@@ -159,11 +175,14 @@ public class PlayerController : CharacterController, IPunObservable
         {
             Potion pot;
             pot = GameController.CreatePotion(CaseIngridients[Case], EffectIngridients[Effect]);
+            pot.playerID = ID;
             pot.transform.SetParent(transform);
             pot.transform.localPosition = Vector3.zero;
             CaseIngridients.RemoveAt(Case);
             EffectIngridients.RemoveAt(Effect);
             CurrentPotions.Add(pot);
+            EffectSelect.resetIngridiants();
+            CaseSelect.resetIngridiants();
         }
     }
 
@@ -420,22 +439,25 @@ public class PlayerController : CharacterController, IPunObservable
             setSelector(list, currSelect + 1);
 
 
-
-        switch (list)
+        if (getListCount(list) > 0)
         {
-            case ListType.Potion:
-                if (CurrentPotions.Count > 0)
-                {
-                    selectedPotion = CurrentPotions[PotionSelector];
-                }
-                return CurrentPotions[getSelector(list)].name;
-            case ListType.Case:
-                return CaseIngridients[getSelector(list)].name;
-            case ListType.Effect:
-                return EffectIngridients[getSelector(list)].name;
-            default:
-                return "";
+            switch (list)
+            {
+                case ListType.Potion:
+                    if (CurrentPotions.Count > 0)
+                    {
+                        selectedPotion = CurrentPotions[PotionSelector];
+                    }
+                    return CurrentPotions[getSelector(list)].name;
+                case ListType.Case:
+                    return CaseIngridients[getSelector(list)].name;
+                case ListType.Effect:
+                    return EffectIngridients[getSelector(list)].name;
+                default:
+                    return "";
+            }
         }
+        return "";
 
     }
 
@@ -448,22 +470,25 @@ public class PlayerController : CharacterController, IPunObservable
         else
             setSelector(list, 0);
 
-        switch (list)
+        if (getListCount(list) > 0)
         {
-            case ListType.Potion:
-                if (CurrentPotions.Count > 0)
-                {
-                    selectedPotion = CurrentPotions[PotionSelector];
-                }
-                return CurrentPotions[getSelector(list)].name;
-            case ListType.Case:
-                return CaseIngridients[getSelector(list)].name;
-            case ListType.Effect:
-                return EffectIngridients[getSelector(list)].name;
-            default:
-                return "";
+            switch (list)
+            {
+                case ListType.Potion:
+                    if (CurrentPotions.Count > 0)
+                    {
+                        selectedPotion = CurrentPotions[PotionSelector];
+                    }
+                    return CurrentPotions[getSelector(list)].name;
+                case ListType.Case:
+                    return CaseIngridients[getSelector(list)].name;
+                case ListType.Effect:
+                    return EffectIngridients[getSelector(list)].name;
+                default:
+                    return "";
+            }
         }
-
+        return "";
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -478,6 +503,7 @@ public class PlayerController : CharacterController, IPunObservable
             {
             // Network player, receive data
             isFacingLeft = (bool)stream.ReceiveNext();
+            turnGFX();
             }
 
        

@@ -13,8 +13,6 @@ public class MakeAChoice : MonoBehaviourPunCallbacks
 
     public bool isChoosen;
 
-    public int selectedIngrediantOne = 0;
-
     public TextMesh Text;
 
     public List<GameObject> ingrediantOne = new List<GameObject>();
@@ -39,7 +37,10 @@ public class MakeAChoice : MonoBehaviourPunCallbacks
         }
     }
 
-
+    public void resetIngridiants()
+    {
+        Text.text = mainController.increaseSelector(list);
+    }
 
     public void ChooseIngrediant()
     {
@@ -59,10 +60,7 @@ public class MakeAChoice : MonoBehaviourPunCallbacks
         //    SelectedIngrediantOne();
         //}
     }
-    void SelectedIngrediantOne()
-    {
 
-    }
     private void OnMouseEnter()
     {
         isChoosen = true;

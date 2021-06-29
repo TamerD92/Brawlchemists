@@ -55,6 +55,7 @@ MonoBehaviour:
   BounceAmount: 0
   rb: {fileID: -4187901770510939814}
   Mat: {fileID: 6200000, guid: 93f39192312fec745bb8b2fa9bbb48b8, type: 2}
+  playerID: 0
 --- !u!58 &6499362551113122992
 CircleCollider2D:
   m_ObjectHideFlags: 0

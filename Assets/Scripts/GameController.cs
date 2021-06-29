@@ -45,7 +45,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-            photonView.RPC("GeneratePools", RpcTarget.AllBufferedViaServer);
+            GeneratePools();
         }
 
         GeneratePotions();
@@ -61,11 +61,11 @@ public class GameController : MonoBehaviourPunCallbacks
         PickupPool = new List<PickupBase>();
         for (int i = 0; i < 40; i++)
         {
-            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
+            GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, new Vector3(-1000, -1000, 0), Quaternion.identity);
             PickupPool.Add(pickup.GetComponent<PickupBase>());
 
             pickup.transform.SetParent(PickupPoolTransform);
-            pickup.transform.position = new Vector3(-1000, -1000, -1000);
+            pickup.transform.position = new Vector3(-1000, -1000, 0);
         }
     }
 
@@ -77,21 +77,21 @@ public class GameController : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < 40; i++)
         {
-            GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
+            GameObject newPot = PhotonNetwork.Instantiate(potionPrefab.name, new Vector3(-1000, -1000, 0), Quaternion.identity);
             newPot.SetActive(false);
             potionList.Add(newPot.GetComponent<Potion>());
 
             newPot.transform.SetParent(PotionPoolTransform);
-            newPot.transform.position = new Vector3(-1000, -1000, -1000);
+            newPot.transform.position = new Vector3(-1000, -1000, 0);
             newPot.GetComponent<Potion>().preInit();
 
-            GameObject eff = PhotonNetwork.Instantiate(database.EffectsTypes[i % 5].name, new Vector3(-1000, -1000, -1000), Quaternion.identity);
+            GameObject eff = PhotonNetwork.Instantiate(database.EffectsTypes[i % 5].name, new Vector3(-1000, -1000, 0), Quaternion.identity);
             eff.name = "Effect" + database.EffectsTypes[i % 5].name;
             eff.SetActive(false);
             EffectsPool.Add(eff.GetComponent<EffectBaseClass>());
 
             eff.transform.SetParent(EffectPoolTransform);
-            eff.transform.position = new Vector3(-1000, -1000, -1000);
+            eff.transform.position = new Vector3(-1000, -1000, 0);
         }
     }
 
@@ -137,6 +137,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         pickup.transform.SetParent(null);
         pickup.OnlineGenerate();
+        pickup.gameObject.SetActive(true);
 
         GroundLinesStruct baseLocation = GroundLines[Random.Range(0, GroundLines.Length - 1)];
 
@@ -144,7 +145,6 @@ public class GameController : MonoBehaviourPunCallbacks
         finalWorldPos.x = Random.Range(baseLocation.Start.position.x, baseLocation.End.position.x);
 
         pickup.transform.position = finalWorldPos;
-        pickup.gameObject.SetActive(true);
 
         PickupAmount++;
     }

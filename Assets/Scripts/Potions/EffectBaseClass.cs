@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class EffectBaseClass : MonoBehaviour, EffectInterface, IPunInstantiateMagicCallback, IPunObservable
+public class EffectBaseClass : MonoBehaviourPunCallbacks, EffectInterface, IPunInstantiateMagicCallback
 {
     public int ID;
 
@@ -25,26 +25,23 @@ public class EffectBaseClass : MonoBehaviour, EffectInterface, IPunInstantiateMa
         gameObject.SetActive(false);
     }
 
-    private void Update()
+    [PunRPC]
+    protected void onlineTurnOff()
     {
-        Duration -= Time.deltaTime;
-        if (Duration <= 0)
-        {
-            GameController.instance.ReturnToPoolBase(this);
-        }
+        Duration = 0;
+        GameController.instance.ReturnToPoolBase(this);
+        gameObject.SetActive(false);
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    private void Update()
     {
-        if (stream.IsWriting)
+        if (photonView.IsMine)
         {
-            // We own this player: send the others our data
-            stream.SendNext(gameObject.activeSelf);
-        }
-        else
-        {
-            // Network player, receive data
-            gameObject.SetActive((bool)stream.ReceiveNext());
+            Duration -= Time.deltaTime;
+            if (Duration <= 0)
+            {
+                photonView.RPC("onlineTurnOff", RpcTarget.All);
+            }
         }
     }
 }

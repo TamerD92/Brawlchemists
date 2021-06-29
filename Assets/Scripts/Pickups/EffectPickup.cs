@@ -12,6 +12,7 @@ public class EffectPickup : PickupBase
     [PunRPC]
     public override void Generate(int number)
     {
+        base.Generate(number);
         Effect = GameController.instance.database.EffectsTypes.First(o => o.ID == number);
     }
 

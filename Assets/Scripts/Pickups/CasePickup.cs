@@ -10,7 +10,9 @@ public class CasePickup : PickupBase
     [PunRPC]
     public override void Generate(int number)
     {
+        base.Generate(number);
         Case = GameController.instance.database.CaseTypes[number];
+        
     }
 
     public override void OnlineGenerate()
@@ -18,7 +20,6 @@ public class CasePickup : PickupBase
         int ID = Random.Range(0, GameController.instance.database.CaseTypes.Length);
 
         photonView.RPC("Generate", RpcTarget.AllBufferedViaServer, ID);
-
     }
 
     public override void Collect(PlayerController player)

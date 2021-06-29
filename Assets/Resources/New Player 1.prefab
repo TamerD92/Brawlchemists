@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1408574272675560723
 Transform:
   m_ObjectHideFlags: 0
@@ -101,7 +101,6 @@ MonoBehaviour:
   mainController: {fileID: 6311298335690164509}
   list: 1
   isChoosen: 0
-  selectedIngrediantOne: 0
   Text: {fileID: 6437917038185315757}
   ingrediantOne: []
 --- !u!61 &1408574272675560724
@@ -160,14 +159,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1408574272750426853}
-  - component: {fileID: 1408574272750426850}
   m_Layer: 0
   m_Name: IngrediantsHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1408574272750426853
 Transform:
   m_ObjectHideFlags: 0
@@ -184,21 +182,6 @@ Transform:
   m_Father: {fileID: 5680066753285202494}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1408574272750426850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1408574272750426851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea8b250de6b02994f902f0d6d577ae13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isBrewing: 0
-  brewMats: {fileID: 1408574272750426851}
-  potion: {fileID: 1408574272989328760}
 --- !u!1 &1408574272989328760
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1408574272989328763}
   - component: {fileID: 1408574272989328762}
-  - component: {fileID: 1408574272989328765}
   - component: {fileID: 1408574272989328764}
   - component: {fileID: 1408574272989328767}
   - component: {fileID: 1408574272989328766}
@@ -286,21 +268,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1408574272989328765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1408574272989328760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea8b250de6b02994f902f0d6d577ae13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isBrewing: 0
-  brewMats: {fileID: 1408574272750426851}
-  potion: {fileID: 1408574272989328760}
 --- !u!114 &1408574272989328764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,7 +283,6 @@ MonoBehaviour:
   mainController: {fileID: 6311298335690164509}
   list: 0
   isChoosen: 0
-  selectedIngrediantOne: 0
   Text: {fileID: 6437917038348567202}
   ingrediantOne:
   - {fileID: 0}
@@ -387,7 +353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1408574274344407663
 Transform:
   m_ObjectHideFlags: 0
@@ -469,7 +435,6 @@ MonoBehaviour:
   mainController: {fileID: 6311298335690164509}
   list: 2
   isChoosen: 0
-  selectedIngrediantOne: 0
   Text: {fileID: 6437917038821945398}
   ingrediantOne: []
 --- !u!61 &1408574274344407648
@@ -831,6 +796,8 @@ MonoBehaviour:
   EffectSelect: {fileID: 1408574274344407649}
   selectedPotion: {fileID: 0}
   OverlappingPickups: []
+  isBrewing: 0
+  ID: 0
 --- !u!114 &6311298335690164510
 MonoBehaviour:
   m_ObjectHideFlags: 0

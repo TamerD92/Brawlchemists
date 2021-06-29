@@ -20,6 +20,8 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
 
     public PhysicsMaterial2D Mat;
 
+    public int playerID;
+
     public void preInit()
     {
         collider.enabled = false;
@@ -70,27 +72,40 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
     [PunRPC]
     public void Detonate()
     {
-        if (photonView.IsMine)
-        {
+        effect.transform.SetParent(null);
 
-            effect.transform.SetParent(null);
+        effect.gameObject.SetActive(true);
 
-            effect.gameObject.SetActive(true);
-
-            effect.transform.rotation = Quaternion.identity;
-        }
+        effect.transform.rotation = Quaternion.identity;
 
         GameController.instance.ReturnToPoolBase(this);
+
+        if (photonView.IsMine)
+        {
+            DeployPotion(false);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
 
         BounceAmount--;
         if (BounceAmount <= 0 || collision.transform.tag == "Player")
         {
+            if (collision.transform.tag == "Player")
+            {
+                if (collision.gameObject.GetComponent<PlayerController>().ID == playerID)
+                {
+                    return;
+                }
+            }
             BounceAmount = 0;
             photonView.RPC("Detonate", RpcTarget.All);
+            
         }
     }
 
@@ -99,29 +114,51 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
         gameObject.SetActive(false);
     }
 
+    public void DeployPotion(bool active)
+    {
+        photonView.RPC("onlineDeployPotion", RpcTarget.All, active);
+    }
+
+    [PunRPC]
+    private void onlineDeployPotion(bool active)
+    {
+        gameObject.SetActive(active);
+
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
             // We own this player: send the others our data
-            stream.SendNext(gameObject.activeSelf);
             stream.SendNext(effect.ID);
+            stream.SendNext(rb.gravityScale);
+            stream.SendNext(collider.enabled);
+            stream.SendNext(playerID);
         }
         else
         {
             // Network player, receive data
-            gameObject.SetActive((bool)stream.ReceiveNext());
+
+            int effID = ((int)stream.ReceiveNext());
 
             if (!effect)
             {
-                int effID = ((int)stream.ReceiveNext());
+                Debug.Log("Starting effect deserealization");
                 EffectBaseClass syncEffect = GameController.instance.EffectsPool.Where(o => o.ID == effID).ToList()[0];
                 GameController.instance.EffectsPool.Remove(syncEffect);
-
+                
                 syncEffect.transform.SetParent(transform);
                 syncEffect.transform.localPosition = Vector3.zero;
                 effect = syncEffect;
             }
+
+            rb.gravityScale = (float)stream.ReceiveNext();
+
+            collider.enabled = (bool)stream.ReceiveNext();
+
+            playerID = (int)stream.ReceiveNext();
+
         }
     }
 }
