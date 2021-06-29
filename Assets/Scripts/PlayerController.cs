@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class PlayerController : CharacterController, IPunObservable
@@ -507,5 +508,10 @@ public class PlayerController : CharacterController, IPunObservable
             }
 
        
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        gameObject.SetActive(false);
     }
 }
