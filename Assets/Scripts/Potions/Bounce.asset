@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afddaeb678bb5b46910f9eb134b6830, type: 3}
   m_Name: Bounce
   m_EditorClassIdentifier: 
-  maxStrength: 3
+  maxStrength: 8
+  image: {fileID: 21300000, guid: 7be616df2d9bbb345bbd963d2fe0b2e7, type: 3}
+  CaseColor: {r: 0.33638668, g: 0.8207547, b: 0.16002129, a: 0.6156863}
   bounceMat: {fileID: 6200000, guid: 93f39192312fec745bb8b2fa9bbb48b8, type: 2}
   BounceAmount: 3

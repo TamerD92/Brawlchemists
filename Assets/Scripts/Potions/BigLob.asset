@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59cf1b1b4801f22469141edb54df5419, type: 3}
-  m_Name: NormalLob
+  m_Name: BigLob
   m_EditorClassIdentifier: 
-  maxStrength: 10
-  image: {fileID: 21300000, guid: fc79766a21106fb4fbfddefda418bdd1, type: 3}
-  CaseColor: {r: 0.21431106, g: 0.7924528, b: 0.70787245, a: 0.85490197}
+  maxStrength: 12
+  image: {fileID: 21300000, guid: 3f6421b172070ee4eaed6ab4ab9db976, type: 3}
+  CaseColor: {r: 0.5129346, g: 0.60504913, b: 0.6132076, a: 1}

@@ -15,7 +15,11 @@ public class MakeAChoice : MonoBehaviourPunCallbacks
 
     public TextMesh Text;
 
+    public SpriteRenderer image, filling;
+
     public List<GameObject> ingrediantOne = new List<GameObject>();
+
+    bool scroll;
 
     // Start is called before the first frame update
     void Start()
@@ -33,26 +37,57 @@ public class MakeAChoice : MonoBehaviourPunCallbacks
     {
         if (isChoosen && photonView.IsMine)
         {
-            ChooseIngrediant();
+            float dir = Input.GetAxis("Mouse ScrollWheel");
+            if (dir != 0)
+            {
+                ChooseIngrediant(dir);
+            }
+
         }
     }
 
     public void resetIngridiants()
     {
-        Text.text = mainController.increaseSelector(list);
+        PictureStruct pic = mainController.increaseSelector(list);
+
+        image.sprite = pic.image;
+
+        if (pic.image2)
+        {
+            image.color = pic.color;
+            filling.sprite = pic.image2;
+            filling.color = pic.color2;
+        }
+        else if(filling)
+        {
+            filling.sprite = null;
+        }
     }
 
-    public void ChooseIngrediant()
+    public void ChooseIngrediant(float dir)
     {
         //int previousSelectedIngrediant = selectedIngrediantOne;
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        PictureStruct pic = new PictureStruct();
+
+        if (dir > 0f)
         {
-            Text.text = mainController.increaseSelector(list);
+            pic = mainController.increaseSelector(list);
+
         }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        if (dir < 0f)
         {
-            Text.text = mainController.decreaseSelector(list);
+            pic = mainController.decreaseSelector(list);
+
+        }
+
+        image.sprite = pic.image;
+
+        if (pic.image2)
+        {
+            image.color = pic.color;
+            filling.sprite = pic.image2;
+            filling.color = pic.color2;
         }
 
         //if (previousSelectedIngrediant != selectedIngrediantOne)

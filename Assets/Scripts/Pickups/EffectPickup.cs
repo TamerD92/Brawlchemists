@@ -14,11 +14,13 @@ public class EffectPickup : PickupBase
     {
         base.Generate(number);
         Effect = GameController.instance.database.EffectsTypes.First(o => o.ID == number);
+        image = Effect.Image;
+        spriteRenderer.sprite = image;
     }
 
     public override void OnlineGenerate()
     {
-        int ID = Random.Range(0, GameController.instance.database.CaseTypes.Length);
+        int ID = Random.Range(0, GameController.instance.database.EffectsTypes.Length);
 
         photonView.RPC("Generate", RpcTarget.AllBufferedViaServer, ID);
 

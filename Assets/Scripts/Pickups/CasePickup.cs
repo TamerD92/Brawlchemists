@@ -7,12 +7,14 @@ public class CasePickup : PickupBase
 {
     public CaseBaseClass Case;
 
+
     [PunRPC]
     public override void Generate(int number)
     {
         base.Generate(number);
         Case = GameController.instance.database.CaseTypes[number];
-        
+        image = Case.image;
+        spriteRenderer.sprite = image;
     }
 
     public override void OnlineGenerate()

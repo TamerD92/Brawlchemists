@@ -21,6 +21,10 @@ MonoBehaviour:
   CaseTypes:
   - {fileID: 11400000, guid: 36a548937a583474fa2e5981842b0d1c, type: 2}
   - {fileID: 11400000, guid: ed47d5281884da74a9f77f295c00bdd9, type: 2}
+  - {fileID: 11400000, guid: ff3ba81601594c04d8377866ede40554, type: 2}
   PickupTypes:
   - {fileID: 5538798572565909697, guid: 20be58a326dd8d34c9339f73405d9d00, type: 3}
   - {fileID: 999520410802305038, guid: b0e0c92e33a5db54ca29535e3a1fa4bd, type: 3}
+  FullPotion: {fileID: 21300000, guid: 7102f9c32f66c0b49aa3ca3d825c9d69, type: 3}
+  PotionHollow: {fileID: 21300000, guid: afb4ef835d53d7b4b9410139ab8dfecd, type: 3}
+  PotionFilling: {fileID: 21300000, guid: 1099a589977f5234dae848d36ac25c9b, type: 3}

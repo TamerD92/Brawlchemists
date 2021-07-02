@@ -88,7 +88,8 @@ MonoBehaviour:
   - {fileID: 1155838532284053197}
   Duration: 1.5
   damage: 7
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: 87c86a4b7aff7e641b7dec8985e56a00, type: 3}
+  fillingColor: {r: 0.7490196, g: 0.2832165, b: 0.16078432, a: 0.7411765}
 --- !u!114 &3665663664194281584
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,6 +15,8 @@ public class EffectBaseClass : MonoBehaviourPunCallbacks, EffectInterface, IPunI
 
     public Sprite Image;
 
+    public Color fillingColor;
+
     public virtual void doEffect(PlayerController player)
     {
         //throw new System.NotImplementedException();

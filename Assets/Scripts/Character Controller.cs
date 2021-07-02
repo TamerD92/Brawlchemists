@@ -133,6 +133,11 @@ public class CharacterController : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (collision.collider.tag == "Floor" && CheckDownCollision())
         {
             OnTouchingFloor.Invoke();
@@ -150,6 +155,11 @@ public class CharacterController : MonoBehaviourPunCallbacks
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (collision.collider.tag == "Floor" && CheckDownCollision())
         {
             OnLeaveFloor.Invoke();

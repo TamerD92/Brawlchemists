@@ -9,7 +9,10 @@ public class PickupBase : MonoBehaviourPunCallbacks
 {
 
     public Sprite image;
-    
+
+    public SpriteRenderer spriteRenderer;
+
+
     [PunRPC]
     public virtual void Generate(int number)
     {

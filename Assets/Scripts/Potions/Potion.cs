@@ -22,6 +22,8 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
 
     public int playerID;
 
+    public SpriteRenderer MainSprite, FillingSprite;
+
     public void preInit()
     {
         collider.enabled = false;
@@ -35,11 +37,16 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
         {
             BounceAmount = (Case as BounceCase).BounceAmount;
             Mat = (Case as BounceCase).bounceMat;
+            rb.sharedMaterial = Mat;
         }
         else
         {
             BounceAmount = 1;
         }
+
+        MainSprite.color = Case.CaseColor;
+        FillingSprite.color = effect.fillingColor;
+
         effect.gameObject.SetActive(false);
     }
 

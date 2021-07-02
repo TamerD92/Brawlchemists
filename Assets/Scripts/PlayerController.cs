@@ -32,7 +32,8 @@ public class PlayerController : CharacterController, IPunObservable
 
     public bool isBrewing;
 
-    
+    public ObjectDatabase database;
+
     public int ID;
 
     public override void Init()
@@ -430,8 +431,10 @@ public class PlayerController : CharacterController, IPunObservable
         }
     }
 
-    public string increaseSelector(ListType list)
+    public PictureStruct increaseSelector(ListType list)
     {
+        PictureStruct picStruct = new PictureStruct();
+
         int currSelect = getSelector(list);
 
         if (currSelect >= getListCount(list) - 1)
@@ -449,21 +452,29 @@ public class PlayerController : CharacterController, IPunObservable
                     {
                         selectedPotion = CurrentPotions[PotionSelector];
                     }
-                    return CurrentPotions[getSelector(list)].name;
+                    picStruct.image = database.PotionHollow;
+                    picStruct.image2 = database.PotionFilling;
+                    picStruct.color = CurrentPotions[getSelector(list)].MainSprite.color;
+                    picStruct.color2 = CurrentPotions[getSelector(list)].FillingSprite.color;
+                    return picStruct;
                 case ListType.Case:
-                    return CaseIngridients[getSelector(list)].name;
+                    picStruct.image = CaseIngridients[getSelector(list)].image;
+                    return picStruct;
                 case ListType.Effect:
-                    return EffectIngridients[getSelector(list)].name;
+                    picStruct.image = EffectIngridients[getSelector(list)].Image;
+                    return picStruct;
                 default:
-                    return "";
+                    return picStruct;
             }
         }
-        return "";
+        return picStruct;
 
     }
 
-    public string decreaseSelector(ListType list)
+    public PictureStruct decreaseSelector(ListType list)
     {
+        PictureStruct picStruct = new PictureStruct();
+
         int currSelect = getSelector(list);
 
         if (currSelect <= 0)
@@ -480,16 +491,22 @@ public class PlayerController : CharacterController, IPunObservable
                     {
                         selectedPotion = CurrentPotions[PotionSelector];
                     }
-                    return CurrentPotions[getSelector(list)].name;
+                    picStruct.image = database.PotionHollow;
+                    picStruct.image2 = database.PotionFilling;
+                    picStruct.color = CurrentPotions[getSelector(list)].MainSprite.color;
+                    picStruct.color2 = CurrentPotions[getSelector(list)].FillingSprite.color;
+                    return picStruct;
                 case ListType.Case:
-                    return CaseIngridients[getSelector(list)].name;
+                    picStruct.image = CaseIngridients[getSelector(list)].image;
+                    return picStruct;
                 case ListType.Effect:
-                    return EffectIngridients[getSelector(list)].name;
+                    picStruct.image = EffectIngridients[getSelector(list)].Image;
+                    return picStruct;
                 default:
-                    return "";
+                    return picStruct;
             }
         }
-        return "";
+        return picStruct;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

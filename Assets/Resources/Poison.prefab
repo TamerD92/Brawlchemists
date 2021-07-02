@@ -174,7 +174,8 @@ MonoBehaviour:
   - {fileID: 773611763388933506}
   Duration: 2
   damage: 2
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: 2f6eb6a66acb7f44db3b4f4a51a7a6a1, type: 3}
+  fillingColor: {r: 0.29345357, g: 0.8207547, b: 0.1755072, a: 1}
   time: 5
 --- !u!114 &-6921407383678629041
 MonoBehaviour:

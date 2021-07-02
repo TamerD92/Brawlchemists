@@ -10,4 +10,6 @@ public class ObjectDatabase : ScriptableObject
     public CaseBaseClass[] CaseTypes;
 
     public PickupBase[] PickupTypes;
+
+    public Sprite FullPotion, PotionHollow, PotionFilling;
 }
