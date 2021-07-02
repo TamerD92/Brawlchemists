@@ -228,7 +228,11 @@ public class PlayerController : CharacterController, IPunObservable
 
         rb.AddForce(direction.normalized * finalPower, ForceMode2D.Impulse);
 
-        Invoke("EnableAllControllers", 0.25f);
+        if (!IsFrozen)
+        {
+            Invoke("EnableAllControllers", 0.25f);
+
+        }
     }
 
     #region controller management
@@ -276,12 +280,14 @@ public class PlayerController : CharacterController, IPunObservable
         if (!IsFrozen)
         {
             IsFrozen = true;
+            PlayerGFX.color = Color.blue;
             while (FreezeTime > 0)
             {
                 FreezeTime -= Time.deltaTime;
                 yield return null;
             }
             EnableAllControllers();
+            PlayerGFX.color = Color.white;
             IsFrozen = false;
         }
 
@@ -306,16 +312,14 @@ public class PlayerController : CharacterController, IPunObservable
         PoisonTime = time;
         if (!IsPoisoned)
         {
+            PlayerGFX.color = Color.green;
             IsPoisoned = true;
             while (PoisonTime > 0)
             {
-                PoisonTime -= Time.deltaTime;
-                yield return null;
-                if (PoisonTime % 1 == 0)
-                {
+                yield return new WaitForSeconds(1);
                     currStats.HP -= damage;
                     HPChangedEvent.Invoke();
-                }
+                PoisonTime--;
             }
             IsPoisoned = false;
         }
