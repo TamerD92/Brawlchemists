@@ -142,6 +142,14 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
             stream.SendNext(rb.gravityScale);
             stream.SendNext(collider.enabled);
             stream.SendNext(playerID);
+            stream.SendNext(MainSprite.color.r);
+            stream.SendNext(MainSprite.color.g);
+            stream.SendNext(MainSprite.color.b);
+            stream.SendNext(MainSprite.color.a); 
+            stream.SendNext(FillingSprite.color.r);
+            stream.SendNext(FillingSprite.color.g);
+            stream.SendNext(FillingSprite.color.b);
+            stream.SendNext(FillingSprite.color.a);
         }
         else
         {
@@ -165,6 +173,9 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
             collider.enabled = (bool)stream.ReceiveNext();
 
             playerID = (int)stream.ReceiveNext();
+
+            MainSprite.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
+            FillingSprite.color = new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext());
 
         }
     }

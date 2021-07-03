@@ -321,6 +321,7 @@ public class PlayerController : CharacterController, IPunObservable
                     HPChangedEvent.Invoke();
                 PoisonTime--;
             }
+            PlayerGFX.color = Color.white;
             IsPoisoned = false;
         }
         
@@ -520,13 +521,18 @@ public class PlayerController : CharacterController, IPunObservable
             {
                 // We own this player: send the others our data
                 stream.SendNext(isFacingLeft);
+            stream.SendNext(IsPoisoned);
+            stream.SendNext(IsFrozen);
             }
             else
             {
             // Network player, receive data
             isFacingLeft = (bool)stream.ReceiveNext();
             turnGFX();
-            }
+
+            PlayerGFX.color = (bool)stream.ReceiveNext() ? Color.green : Color.white;
+            PlayerGFX.color = (bool)stream.ReceiveNext() ? Color.blue : Color.white;
+        }
 
        
     }
