@@ -934,7 +934,19 @@ MonoBehaviour:
       m_Calls: []
   ObjectDiedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6311298335690164509}
+        m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
+        m_MethodName: Die
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnSpawnEvent:
     m_PersistentCalls:
       m_Calls:
@@ -1031,6 +1043,7 @@ MonoBehaviour:
   isTouchingWall: 0
   isFacingLeft: 0
   Camera: {fileID: 9160353519699567513}
+  SpawnPoint: {fileID: 0}
   PlayerControllers:
   - {fileID: 6311298335690164511}
   - {fileID: 6311298335690164510}
