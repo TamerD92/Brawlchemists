@@ -147,7 +147,7 @@ public class PlayerController : CharacterController, IPunObservable
             isPickingUp = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && isBrewing)
         {
             CreatePotion(CaseSelector , EffectSelector);
         }
@@ -159,6 +159,11 @@ public class PlayerController : CharacterController, IPunObservable
             EffectSelect.gameObject.SetActive(isBrewing);
             CaseSelect.gameObject.SetActive(isBrewing);
             potionSelect.gameObject.SetActive(!isBrewing);
+
+            if (isBrewing)
+                DisableAllControllers();
+            else
+                EnableAllControllers();
         }
 
     }
