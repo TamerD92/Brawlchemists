@@ -34,7 +34,7 @@ public class PlayerController : CharacterController, IPunObservable
 
     public ObjectDatabase database;
 
-    public int ID;
+    public int ID, imageID;
 
     public override void Init()
     {
@@ -61,6 +61,8 @@ public class PlayerController : CharacterController, IPunObservable
         {
             PlayerControllers[i].reset();
         }
+
+        PlayerGFX.sprite = database.PlayerSprites[imageID];
     }
 
     // Start is called before the first frame update
@@ -108,7 +110,7 @@ public class PlayerController : CharacterController, IPunObservable
             isJumpingAxisUsed = false;
         }
 
-        if (Input.GetAxis("Fire1") != 0 && !isThrowing && isTouchingFloor && selectedPotion != null)
+        if (Input.GetAxis("Fire1") != 0 && !isThrowing && selectedPotion != null)
         {
             selectedPotion.DeployPotion(true);
             isPreparing = true;
@@ -523,6 +525,7 @@ public class PlayerController : CharacterController, IPunObservable
                 stream.SendNext(isFacingLeft);
             stream.SendNext(IsPoisoned);
             stream.SendNext(IsFrozen);
+            stream.SendNext(imageID);
             }
             else
             {
@@ -532,6 +535,7 @@ public class PlayerController : CharacterController, IPunObservable
 
             PlayerGFX.color = (bool)stream.ReceiveNext() ? Color.green : Color.white;
             PlayerGFX.color = (bool)stream.ReceiveNext() ? Color.blue : Color.white;
+            PlayerGFX.sprite = database.PlayerSprites[(int)stream.ReceiveNext()];
         }
 
        

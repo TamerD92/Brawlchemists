@@ -28,3 +28,7 @@ MonoBehaviour:
   FullPotion: {fileID: 21300000, guid: 7102f9c32f66c0b49aa3ca3d825c9d69, type: 3}
   PotionHollow: {fileID: 21300000, guid: afb4ef835d53d7b4b9410139ab8dfecd, type: 3}
   PotionFilling: {fileID: 21300000, guid: 1099a589977f5234dae848d36ac25c9b, type: 3}
+  PlayerSprites:
+  - {fileID: 21300000, guid: c777668f24ded82439cc8f7bd759bc3c, type: 3}
+  - {fileID: 21300000, guid: 3db36c18447f2ad4a8adaad47a09370e, type: 3}
+  - {fileID: 21300000, guid: 55657757c99593947a2b603b700c0330, type: 3}

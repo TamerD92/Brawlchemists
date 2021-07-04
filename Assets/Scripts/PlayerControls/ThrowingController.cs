@@ -44,7 +44,7 @@ public class ThrowingController : BaseController
         mainController.selectedPotion.transform.SetParent(ThrowTransform);
         mainController.selectedPotion.transform.position = ThrowTransform.position;
 
-        mainController.DisableAllOtherControllers(this);
+        //mainController.DisableAllOtherControllers(this);
     }
 
     public void Throw()
@@ -52,6 +52,6 @@ public class ThrowingController : BaseController
         mainController.selectedPotion.Launch(ThrowStrength, throwAngle);
         mainController.CurrentPotions.Remove(mainController.selectedPotion);
         mainController.selectedPotion = null;
-        mainController.EnableAllControllers();
+        //mainController.EnableAllControllers();
     }
 }

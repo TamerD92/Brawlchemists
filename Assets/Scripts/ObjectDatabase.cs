@@ -12,4 +12,6 @@ public class ObjectDatabase : ScriptableObject
     public PickupBase[] PickupTypes;
 
     public Sprite FullPotion, PotionHollow, PotionFilling;
+
+    public Sprite[] PlayerSprites;
 }

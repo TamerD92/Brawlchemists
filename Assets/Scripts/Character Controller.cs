@@ -23,6 +23,7 @@ public class CharacterController : MonoBehaviourPunCallbacks
 
     public CameraWork Camera;
 
+    public Transform SpawnPoint;
 
     // Start is called before the first frame update
     void Start()
@@ -92,7 +93,10 @@ public class CharacterController : MonoBehaviourPunCallbacks
     }
 
     public virtual void Die()
-    { 
+    {
+        currStats.HP = baseStats.HP;
+        transform.position = SpawnPoint.transform.position;
+
         //Add Online logic for character death;
     }
 

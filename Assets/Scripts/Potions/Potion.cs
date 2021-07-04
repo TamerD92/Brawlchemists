@@ -31,6 +31,7 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
 
     public void init()
     {
+        rb.simulated = false;
         rb.gravityScale = 0;
 
         if (Case is BounceCase)
@@ -60,6 +61,7 @@ public class Potion : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, I
 
         throwVector = Rotate(throwVector, Angle);
 
+        rb.simulated = true;
         rb.gravityScale = 1;
         rb.AddForce(throwVector, ForceMode2D.Impulse);
     }

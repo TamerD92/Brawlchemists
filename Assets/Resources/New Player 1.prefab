@@ -1055,6 +1055,7 @@ MonoBehaviour:
   isBrewing: 0
   database: {fileID: 11400000, guid: 373ec2d4f3f054c40832fee67e13d14f, type: 2}
   ID: 0
+  imageID: 0
 --- !u!114 &6311298335690164510
 MonoBehaviour:
   m_ObjectHideFlags: 0

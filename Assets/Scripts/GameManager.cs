@@ -12,6 +12,8 @@ namespace Com.MyCompany.MyGame
     public class GameManager : MonoBehaviourPunCallbacks
     {
 
+        public Transform[] SpawnPoints;
+
         [Tooltip("The prefab to use for representing the player")]
         public GameObject playerPrefab;
 
@@ -42,7 +44,13 @@ namespace Com.MyCompany.MyGame
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
                 GameObject player = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
 
-                player.GetComponent<PlayerController>().ID = UnityEngine.Random.Range(0, int.MaxValue);
+                PlayerController P = player.GetComponent<PlayerController>();
+
+                P.ID = UnityEngine.Random.Range(0, int.MaxValue);
+                P.imageID = PhotonNetwork.PlayerList.Length - 1;
+                P.SpawnPoint = SpawnPoints[PhotonNetwork.PlayerList.Length - 1];
+                P.transform.position = P.SpawnPoint.position;
+
             }
         }
 
