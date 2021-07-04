@@ -8,7 +8,7 @@ public class GameController : MonoBehaviourPunCallbacks
 {
     public const float GRAVITY_SCALE = 3;
 
-    public const float PICKUP_TIME = 1;
+    public const float PICKUP_TIME = 5;
 
     public const int PICKUP_LIMIT = 15;
 
@@ -59,7 +59,7 @@ public class GameController : MonoBehaviourPunCallbacks
         PickupTimer = 0;
 
         PickupPool = new List<PickupBase>();
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < 100; i++)
         {
             GameObject pickup = PhotonNetwork.Instantiate(database.PickupTypes[i % 2].name, new Vector3(-1000, -1000, 0), Quaternion.identity);
             PickupPool.Add(pickup.GetComponent<PickupBase>());
@@ -210,7 +210,7 @@ public class GameController : MonoBehaviourPunCallbacks
             potion.transform.SetParent(PotionPoolTransform);
             potion.gameObject.SetActive(false);
             potionList.Add(potion);
-            potion.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            potion.transform.localPosition = new Vector3(-1000, -1000, -0);
             //potion.gameObject.SetActive(false);
         }
     } 
@@ -222,7 +222,7 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             effect.transform.SetParent(EffectPoolTransform);
             EffectsPool.Add(effect);
-            effect.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            effect.transform.localPosition = new Vector3(-1000, -1000, -0);
             effect.gameObject.SetActive(false);
         }
     }
@@ -233,7 +233,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             pickup.transform.SetParent(PickupPoolTransform);
-            pickup.transform.localPosition = new Vector3(-1000, -1000, -1000);
+            pickup.transform.localPosition = new Vector3(-1000, -1000, -0);
             PickupPool.Add(pickup);
             PickupAmount--;
 
